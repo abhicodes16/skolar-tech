@@ -8,7 +8,8 @@ class ApiConstant {
 
   static const String API_URL = '$BASE_URL/API/Master';
 
-  static const String LOGIN = '$API_URL/studentSignIn?schoolCode=';
+  // static const String LOGIN = '$API_URL/studentSignIn?schoolCode=';
+  static const String LOGIN = '$API_URL/userSignIn?schoolCode=';
   static const String TEACHER_LOGIN = '$API_URL/teacherSignIn?schoolCode=';
 
   static const String TEACHER_PROFILE = '$API_URL/getTeacherProfile';
@@ -35,6 +36,10 @@ class ApiConstant {
   static const String READ_STATUS = '$API_URL/postUpdateNoticeStatus';
 
   static const String STD_NEWS = '$API_URL/getNews';
+
+  static const String ADMIN_HOME = '$API_URL/getAppAdminDashboard';
+  static const String ADMIN_LOG = '$API_URL/getAppAdminLogEntities';
+  static const String ADMIN_LOG_DETAILS = '$API_URL/postAppAdminActivityLogs';
 
   static const String HOLIDAY_LIST = '$API_URL/getHolidayList';
   static const String CURRENT_HOLIDAY_LIST =

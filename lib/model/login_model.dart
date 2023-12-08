@@ -4,6 +4,12 @@ class LoginModel {
   String? message;
   String? token;
   String? userId;
+  String? userType;
+  String? userName;
+  String? gender;
+  String? userDOB;
+  String? userMobileNo;
+  String? userLoginId;
   String? sTDNAME;
   String? sTDGNDR;
   String? sTDDOB;
@@ -16,6 +22,12 @@ class LoginModel {
       this.message,
       this.token,
       this.userId,
+      this.userName,
+      this.userType,
+      this.gender,
+      this.userDOB,
+      this.userMobileNo,
+      this.userLoginId,
       this.sTDNAME,
       this.sTDGNDR,
       this.sTDDOB,
@@ -28,6 +40,12 @@ class LoginModel {
     message = json['Message'];
     token = json['token'];
     userId = json['UserId'];
+    userType = json['userType'];
+    userName = json['userName'];
+    gender = json['gender'];
+    userMobileNo = json['userMobileNo'];
+    userLoginId = json['userLoginId'];
+    userDOB = json['userDOB'];
     sTDNAME = json['STD_NAME'];
     sTDGNDR = json['STD_GNDR'];
     sTDDOB = json['STD_DOB'];
@@ -42,6 +60,12 @@ class LoginModel {
     data['Message'] = this.message;
     data['token'] = this.token;
     data['UserId'] = this.userId;
+    data['userName'] = this.userName;
+    data['userType'] = this.userType;
+    data['gender'] = this.gender;
+    data['userDOB'] = this.userDOB;
+    data['userMobileNo'] = this.userMobileNo;
+    data['userLoginId'] = this.userLoginId;
     data['STD_NAME'] = this.sTDNAME;
     data['STD_GNDR'] = this.sTDGNDR;
     data['STD_DOB'] = this.sTDDOB;

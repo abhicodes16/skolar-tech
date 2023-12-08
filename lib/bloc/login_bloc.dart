@@ -60,73 +60,115 @@ class LoginBloc {
     debugPrint("School Code : $schoolCode");
 
     SharedPreferences pref = await SharedPreferences.getInstance();
-    if (isTeacher!) {
-      LoginTeacherModel data = await loginRepos.sendTeacherReq(
-        userName: userName,
-        password: password,
-        deviceId: deviceId,
-        deviceToken: deviceId,
-        iPAddress: ipv4.toString(),
-        schoolCode: schoolCode,
-      );
+    LoginModel data = await loginRepos.sendLoginReq(
+      userName: userName,
+      password: password,
+      deviceId: deviceId,
+      deviceToken: deviceId,
+      iPAddress: ipv4.toString(),
+      schoolCode: schoolCode,
+    );
 
-      if (data.token != null) {
-        Navigator.pop(context);
-        pref.setBool('isLoggedIn', true);
-        pref.setBool('isTeacher', true);
-        pref.setString('token', data.token!);
-        pref.setString('userId', data.userId!);
-        pref.setString('EMP_NAME', data.eMPNAME!);
-        pref.setString('EMP_GNDR', data.eMPGNDR!);
-        pref.setString('EMP_DOB', data.eMPDOB!);
-        pref.setString('Emp_IdNo', data.empIdNo!);
-        pref.setString('EMP_MOB', data.eMPMOB!);
-        pref.setString('schoolCode', schoolCode ?? '');
+    if (data.token != null) {
+      Navigator.pop(context);
 
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomePage(),
-            ),
-            (route) => false);
-      } else {
-        Navigator.pop(context);
-        ErrorDialouge.showErrorDialogue(context, data.message!);
+      bool isTearcher = false;
+      bool isAdmin = false;
+
+      if (data.userType == 'Employee') {
+        isTearcher = true;
+      } else if (data.userType == 'Admin') {
+        isAdmin = true;
       }
+
+      pref.setBool('isLoggedIn', true);
+      pref.setBool('isTeacher', isTearcher);
+      pref.setBool('isAdmin', isAdmin);
+      pref.setString('token', data.token!);
+      pref.setString('userId', data.userId!);
+      // pref.setString('STD_NAME', data.sTDNAME!);
+      // pref.setString('sTDGNDR', data.sTDGNDR!);
+      // pref.setString('sTDDOB', data.sTDDOB!);
+      // pref.setString('sTDIDNO', data.sTDIDNO!);
+      // pref.setString('sTDMOB', data.sTDMOB!);
+
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(),
+          ),
+          (route) => false);
     } else {
-      LoginModel data = await loginRepos.sendLoginReq(
-        userName: userName,
-        password: password,
-        deviceId: deviceId,
-        deviceToken: deviceId,
-        iPAddress: ipv4.toString(),
-        schoolCode: schoolCode,
-      );
-
-      if (data.token != null) {
-        Navigator.pop(context);
-
-        pref.setBool('isLoggedIn', true);
-        pref.setBool('isTeacher', false);
-        pref.setString('token', data.token!);
-        pref.setString('userId', data.userId!);
-        pref.setString('STD_NAME', data.sTDNAME!);
-        pref.setString('sTDGNDR', data.sTDGNDR!);
-        pref.setString('sTDDOB', data.sTDDOB!);
-        pref.setString('sTDIDNO', data.sTDIDNO!);
-        pref.setString('sTDMOB', data.sTDMOB!);
-
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomePage(),
-            ),
-            (route) => false);
-      } else {
-        Navigator.pop(context);
-        ErrorDialouge.showErrorDialogue(context, data.message!);
-      }
+      Navigator.pop(context);
+      ErrorDialouge.showErrorDialogue(context, data.message!);
     }
+    // if (isTeacher!) {
+    //   LoginTeacherModel data = await loginRepos.sendTeacherReq(
+    //     userName: userName,
+    //     password: password,
+    //     deviceId: deviceId,
+    //     deviceToken: deviceId,
+    //     iPAddress: ipv4.toString(),
+    //     schoolCode: schoolCode,
+    //   );
+
+    //   if (data.token != null) {
+    //     Navigator.pop(context);
+    //     pref.setBool('isLoggedIn', true);
+    //     pref.setBool('isTeacher', true);
+    //     pref.setString('token', data.token!);
+    //     pref.setString('userId', data.userId!);
+    //     pref.setString('EMP_NAME', data.eMPNAME!);
+    //     pref.setString('EMP_GNDR', data.eMPGNDR!);
+    //     pref.setString('EMP_DOB', data.eMPDOB!);
+    //     pref.setString('Emp_IdNo', data.empIdNo!);
+    //     pref.setString('EMP_MOB', data.eMPMOB!);
+    //     pref.setString('schoolCode', schoolCode ?? '');
+
+    //     Navigator.pushAndRemoveUntil(
+    //         context,
+    //         MaterialPageRoute(
+    //           builder: (context) => HomePage(),
+    //         ),
+    //         (route) => false);
+    //   } else {
+    //     Navigator.pop(context);
+    //     ErrorDialouge.showErrorDialogue(context, data.message!);
+    //   }
+    // } else {
+    //   LoginModel data = await loginRepos.sendLoginReq(
+    //     userName: userName,
+    //     password: password,
+    //     deviceId: deviceId,
+    //     deviceToken: deviceId,
+    //     iPAddress: ipv4.toString(),
+    //     schoolCode: schoolCode,
+    //   );
+
+    //   if (data.token != null) {
+    //     Navigator.pop(context);
+
+    //     pref.setBool('isLoggedIn', true);
+    //     pref.setBool('isTeacher', false);
+    //     pref.setString('token', data.token!);
+    //     pref.setString('userId', data.userId!);
+    //     pref.setString('STD_NAME', data.sTDNAME!);
+    //     pref.setString('sTDGNDR', data.sTDGNDR!);
+    //     pref.setString('sTDDOB', data.sTDDOB!);
+    //     pref.setString('sTDIDNO', data.sTDIDNO!);
+    //     pref.setString('sTDMOB', data.sTDMOB!);
+
+    //     Navigator.pushAndRemoveUntil(
+    //         context,
+    //         MaterialPageRoute(
+    //           builder: (context) => HomePage(),
+    //         ),
+    //         (route) => false);
+    //   } else {
+    //     Navigator.pop(context);
+    //     ErrorDialouge.showErrorDialogue(context, data.message!);
+    //   }
+    // }
     print('$isTeacher');
     // } catch (e) {
     //   Navigator.pop(context);

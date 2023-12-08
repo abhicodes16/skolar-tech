@@ -201,23 +201,30 @@ class _LoginState extends State<Login> {
         } else if (password.isEmpty) {
           ErrorDialouge.showErrorDialogue(context, "Password can't be empty");
         } else {
-          if (userName.contains("/T/")) {
-            LoginBloc(
-              userName: userNameController.text,
-              password: passwordController.text,
-              context: context,
-              isTeacher: true,
-              schoolCode: widget.schoolCode,
-            );
-          } else {
-            LoginBloc(
-              userName: userNameController.text,
-              password: passwordController.text,
-              context: context,
-              schoolCode: widget.schoolCode,
-              isTeacher: false,
-            );
-          }
+          // if (userName.contains("/T/")) {
+          //   LoginBloc(
+          //     userName: userNameController.text,
+          //     password: passwordController.text,
+          //     context: context,
+          //     isTeacher: true,
+          //     schoolCode: widget.schoolCode,
+          //   );
+          // } else {
+          //   LoginBloc(
+          //     userName: userNameController.text,
+          //     password: passwordController.text,
+          //     context: context,
+          //     schoolCode: widget.schoolCode,
+          //     isTeacher: false,
+          //   );
+          // }
+          LoginBloc(
+            userName: userNameController.text,
+            password: passwordController.text,
+            context: context,
+            isTeacher: true,
+            schoolCode: widget.schoolCode,
+          );
         }
       },
       child: const Text(

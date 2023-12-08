@@ -25,13 +25,14 @@ class MyApp extends StatelessWidget {
     );
 
     return MaterialApp(
-      title: 'SKOLAR TECH',  
+      title: 'SKOLAR TECH',
       debugShowCheckedModeBanner: false,
       navigatorKey: NavigationService.navigatorKey,
       theme: ThemeData(
         fontFamily: kThemeFont,
         primaryColor: kThemeColor,
         primarySwatch: Colors.purple,
+        useMaterial3: false,
         appBarTheme: const AppBarTheme(
           backgroundColor: kThemeColor,
         ),
