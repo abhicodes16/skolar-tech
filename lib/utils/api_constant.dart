@@ -41,6 +41,10 @@ class ApiConstant {
   static const String ADMIN_LOG = '$API_URL/getAppAdminLogEntities';
   static const String ADMIN_LOG_DETAILS = '$API_URL/postAppAdminActivityLogs';
 
+  static const String ADMIN_CHANGE_PASS = '$API_URL/postAdminChangePassword';
+  static const String STD_CHANGE_PASS = '$API_URL/postStudentChangePassword';
+  static const String TEACHER_CHANGE_PASS = '$API_URL/postTeacherChangePassword';
+
   static const String HOLIDAY_LIST = '$API_URL/getHolidayList';
   static const String CURRENT_HOLIDAY_LIST =
       '$API_URL/postCurrentMonthHolidayList';

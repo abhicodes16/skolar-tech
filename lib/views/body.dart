@@ -5,6 +5,7 @@ import 'package:pns_skolar/repo/profile/teacher_profile_repo.dart';
 import 'package:pns_skolar/style/palette.dart';
 import 'package:pns_skolar/style/theme_constants.dart';
 import 'package:pns_skolar/views/attendance/attendance.dart';
+import 'package:pns_skolar/views/change_pass.dart';
 import 'package:pns_skolar/views/courses/subject_details.dart';
 import 'package:pns_skolar/views/feedback/feedback_entity.dart';
 import 'package:pns_skolar/views/holiday/holidays.dart';
@@ -695,6 +696,31 @@ class _BodyState extends State<Body> {
                   ),
                 ),
               ),
+            Padding(
+              padding:
+                  const EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
+              child: Card(
+                elevation: 5,
+                clipBehavior: Clip.antiAlias,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChnagePassword(),
+                      ),
+                    );
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: ListTile(
+                      title: Text('Change Password'),
+                      trailing: Icon(CupertinoIcons.arrow_right),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

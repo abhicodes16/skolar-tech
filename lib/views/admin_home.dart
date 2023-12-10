@@ -4,6 +4,7 @@ import 'package:pns_skolar/model/admin_home_model.dart';
 import 'package:pns_skolar/style/palette.dart';
 import 'package:pns_skolar/utils/response.dart';
 import 'package:pns_skolar/views/admin/log_entity.dart';
+import 'package:pns_skolar/views/change_pass.dart';
 import 'package:pns_skolar/views/school_code_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -77,6 +78,7 @@ class _AdminHomeState extends State<AdminHome> {
                 menuIcon: adminHomeModel.data![i].icon,
                 menuName: adminHomeModel.data![i].textDtls,
                 menuValue: adminHomeModel.data![i].value,
+                menuColor: adminHomeModel.data![i].colour,
               );
             },
           )),
@@ -84,7 +86,12 @@ class _AdminHomeState extends State<AdminHome> {
   }
 
   Widget _gridIconName(
-      {String? menuName, String? menuIcon, String? menuValue}) {
+      {String? menuName,
+      String? menuIcon,
+      String? menuValue,
+      String? menuColor}) {
+    Color cardColor = fromHex(menuColor!);
+
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Card(
@@ -94,7 +101,7 @@ class _AdminHomeState extends State<AdminHome> {
         clipBehavior: Clip.antiAlias,
         child: Container(
           decoration: BoxDecoration(
-              color: kThemeColor.withOpacity(0.1),
+              color: cardColor.withOpacity(0.4),
               borderRadius: BorderRadius.circular(12)),
           child: Column(
             children: <Widget>[
@@ -192,6 +199,19 @@ class _AdminHomeState extends State<AdminHome> {
                       ),
                     ),
                   ),
+                ),
+                const SizedBox(width: 10),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ChnagePassword()),
+                    );
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: Icon(Icons.settings, color: Colors.white, size: 26),
+                  ),
                 )
               ],
             ),
@@ -199,6 +219,13 @@ class _AdminHomeState extends State<AdminHome> {
         ],
       ),
     );
+  }
+
+  Color fromHex(String hexString) {
+    final buffer = StringBuffer();
+    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+    buffer.write(hexString.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
   }
 
   showAlertDialog() {

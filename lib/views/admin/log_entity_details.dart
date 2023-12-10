@@ -5,6 +5,7 @@ import '../../model/log_entity/log_entity_details_model.dart';
 import '../../style/palette.dart';
 import '../../style/theme_constants.dart';
 import '../../utils/response.dart';
+import '../../widget/date_formatter.dart';
 import '../../widget/error_message.dart';
 import '../../widget/loading.dart';
 import '../../widget/no_data_foud.dart';
@@ -65,6 +66,11 @@ class _LogEntityDetailsState extends State<LogEntityDetails> {
         shrinkWrap: true,
         padding: const EdgeInsets.only(top: 20, bottom: 20),
         itemBuilder: (context, index) {
+          var dateTime = logEntityModel.data![index].activityDatetime;
+          var fomattedDate = dateTime != null
+              ? DateFormatter.convertDateTimeFormat(dateTime)
+              : '';
+
           return Card(
             margin: kStandardMargin * 2,
             shape: Palette.cardShape,
@@ -77,20 +83,25 @@ class _LogEntityDetailsState extends State<LogEntityDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    logEntityModel.data![index].entity ?? '',
+                    logEntityModel.data![index].activityDetails ?? '',
                     style: const TextStyle(
                       fontWeight: FontWeight.w500,
-                      fontSize: 14.0,
+                      fontSize: 15.0,
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    logEntityModel.data![index].activityDatetime ?? '',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: Colors.grey,
-                      fontSize: 12.0,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        fomattedDate,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: kThemeColor.withOpacity(0.5),
+                          fontSize: 13.0,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

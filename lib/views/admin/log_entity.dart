@@ -54,42 +54,52 @@ class _LogEntityState extends State<LogEntity> {
     if (logEntityModel.data!.isEmpty) {
       return const NoDataFound();
     } else {
-      return ListView.builder(
-        itemCount: logEntityModel.data!.length,
-        shrinkWrap: true,
-        padding: const EdgeInsets.only(top: 20, bottom: 20),
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LogEntityDetails(
-                    entityId: logEntityModel.data![index].entityId.toString(),
-                    entityName: logEntityModel.data![index].entityName ?? '',
+      return Container(
+        margin: const EdgeInsets.fromLTRB(15.0, 25.0, 15.0, 25.0),
+        child: Wrap(
+          // itemCount: logEntityModel.data!.length,
+          // shrinkWrap: true,
+          // padding: const EdgeInsets.only(top: 20, bottom: 20),
+          // itemBuilder: (context, index) {
+          children: List.generate(
+            logEntityModel.data!.length,
+            (index) {
+              return InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LogEntityDetails(
+                        entityId:
+                            logEntityModel.data![index].entityId.toString(),
+                        entityName:
+                            logEntityModel.data![index].entityName ?? '',
+                      ),
+                    ),
+                  );
+                },
+                child: Card(
+                  margin: const EdgeInsets.fromLTRB(8, 10, 8, 10),
+                  color: kThemeLightColor,
+                  shape: Palette.cardShape,
+                  elevation: 5,
+                  clipBehavior: Clip.antiAlias,
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(18, 13, 18, 13),
+                    //height: 40,
+                    child: Text(
+                      logEntityModel.data![index].entityName ?? '',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.0,
+                      ),
+                    ),
                   ),
                 ),
               );
             },
-            child: Card(
-              margin: kStandardMargin * 2,
-              shape: Palette.cardShape,
-              elevation: 5,
-              clipBehavior: Clip.antiAlias,
-              child: Container(
-                margin: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                //height: 40,
-                child: Text(
-                  logEntityModel.data![index].entityName ?? '',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14.0,
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
+          ),
+        ),
       );
     }
   }

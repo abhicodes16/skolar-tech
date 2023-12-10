@@ -37,13 +37,16 @@ class Data {
   String? logDatetime;
   String? entity;
   String? activityDatetime;
+  String? activityDetails;
 
-  Data(
-      {this.logDate,
-      this.logTime,
-      this.logDatetime,
-      this.entity,
-      this.activityDatetime});
+  Data({
+    this.logDate,
+    this.logTime,
+    this.logDatetime,
+    this.entity,
+    this.activityDatetime,
+    this.activityDetails,
+  });
 
   Data.fromJson(Map<String, dynamic> json) {
     logDate = json['LogDate'];
@@ -51,6 +54,7 @@ class Data {
     logDatetime = json['LogDatetime'];
     entity = json['entity'];
     activityDatetime = json['activityDatetime'];
+    activityDetails = json['activityDetails'];
   }
 
   Map<String, dynamic> toJson() {
@@ -60,6 +64,7 @@ class Data {
     data['LogDatetime'] = this.logDatetime;
     data['entity'] = this.entity;
     data['activityDatetime'] = this.activityDatetime;
+    data['activityDetails'] = this.activityDetails;
     return data;
   }
 }

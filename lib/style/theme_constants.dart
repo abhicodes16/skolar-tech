@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 // Colors
 const Color kThemeColor = Color.fromARGB(255, 71, 50, 99);
+const Color kThemeLightColor = Color.fromARGB(255, 230, 211, 255);
 const Color kDarkThemeColor = Color(0xff392850);
 const Color kAccentColor = Color(0xffD3D0D7);
 const Color kDarkAccentColor = Color.fromARGB(255, 73, 38, 121);

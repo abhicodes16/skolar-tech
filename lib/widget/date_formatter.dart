@@ -7,6 +7,13 @@ class DateFormatter {
     String selectedDate = newDateFormat.format(dateTime);
     return selectedDate;
   }
+
+  static String convertDateTimeFormat(String dateTimeString) {
+    DateTime dateTime = DateFormat('yyyy-MM-ddThh:mm').parse(dateTimeString);
+    DateFormat newDateFormat = DateFormat('dd-MM-yyyy hh:mm a');
+    String selectedDate = newDateFormat.format(dateTime);
+    return selectedDate;
+  }
 }
 
 class DateFormatterDMYD {
@@ -53,3 +60,4 @@ class DateFormatterE {
     return selectedDate;
   }
 }
+
