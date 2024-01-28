@@ -92,11 +92,38 @@ class Palette {
     fontWeight: FontWeight.w500,
     fontSize: 16.0,
   );
+
+  static TextStyle titleStatus = const TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 15.0,
+  );
+
+  static TextStyle dateStatus = const TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 14.0,
+    color: Colors.black
+  );
+
+
+
   static TextStyle titleT = const TextStyle(
     fontWeight: FontWeight.w500,
     color: kThemeColor,
     fontSize: 16.0,
   );
+
+  static TextStyle titlestatus2 = const TextStyle(
+      fontWeight: FontWeight.w500,
+      fontSize: 14.0,
+      color: Colors.black
+  );
+
+  static TextStyle titlestatus3 = const TextStyle(
+      fontWeight: FontWeight.w500,
+      fontSize: 14.0,
+      color: kThemeColor
+  );
+
   static TextStyle titlez = const TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 16.0,

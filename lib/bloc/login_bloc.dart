@@ -86,6 +86,7 @@ class LoginBloc {
       pref.setBool('isAdmin', isAdmin);
       pref.setString('token', data.token!);
       pref.setString('userId', data.userId!);
+      pref.setString('schoolCode', schoolCode!);
       // pref.setString('STD_NAME', data.sTDNAME!);
       // pref.setString('sTDGNDR', data.sTDGNDR!);
       // pref.setString('sTDDOB', data.sTDDOB!);

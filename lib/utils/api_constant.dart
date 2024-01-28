@@ -90,4 +90,26 @@ class ApiConstant {
   static const String EXAM_RESULT_COLUMN = '$API_URL/getExamResultColumnNames';
   static const String EXAM_RESULT_COLUMN_VAL =
       '$API_URL/postExamResultColumnValues';
+
+
+  static const String GET_LEAVE_TYPE = '$API_URL/getLeaveTypeName';
+  static const String POST_LEAVE = '$API_URL/postEmployeeLeaveApply';
+  static const String GET_LEAVE_STATUS = '$API_URL/getEmployeeLeaveApplyStatus';
+  static const String GET_LEAVE_SUMMERY = '$API_URL/getEmployeeLeaveSummary';
+
+
+
+  static const String GET_EXAM_DECLARATION = '$API_URL/getExamDeclaration';
+  static const String VIEw_EXAM_SCHEDULE = '$API_URL/postExamSchedule';
+
+
+
+
+  static const String ACADEMIC_CALENDAR = '$API_URL/postAcademicCalendar';
+
+
+
+
+
+
 }

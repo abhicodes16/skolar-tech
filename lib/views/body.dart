@@ -1,14 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pns_skolar/model/teacher_profile_model.dart';
 import 'package:pns_skolar/repo/profile/teacher_profile_repo.dart';
 import 'package:pns_skolar/style/palette.dart';
 import 'package:pns_skolar/style/theme_constants.dart';
+import 'package:pns_skolar/views/academicCalendar.dart';
 import 'package:pns_skolar/views/attendance/attendance.dart';
 import 'package:pns_skolar/views/change_pass.dart';
 import 'package:pns_skolar/views/courses/subject_details.dart';
+import 'package:pns_skolar/views/exam/exam_schedule.dart';
 import 'package:pns_skolar/views/feedback/feedback_entity.dart';
 import 'package:pns_skolar/views/holiday/holidays.dart';
+import 'package:pns_skolar/views/leave/applyForleave.dart';
+import 'package:pns_skolar/views/leave/leaveStatus.dart';
+import 'package:pns_skolar/views/leave/leaveSummery.dart';
 import 'package:pns_skolar/views/news/news.dart';
 import 'package:pns_skolar/views/notice/notice.dart';
 import 'package:pns_skolar/views/pre_year_que/select_class_sem.dart';
@@ -404,12 +410,13 @@ class _BodyState extends State<Body> {
                       children: [
                         InkWell(
                           onTap: () {
-                            Navigator.push(
+                            CalenderBottomDialog();
+                            /*Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => CurMnthHolidayList(),
                               ),
-                            );
+                            );*/
                           },
                           child: Container(
                             height: 60,
@@ -420,7 +427,7 @@ class _BodyState extends State<Body> {
                             ),
                             child: const Center(
                               child: Icon(
-                                Icons.holiday_village,
+                                Icons.calendar_today_sharp,
                                 color: Colors.white,
                                 size: 30,
                               ),
@@ -431,7 +438,7 @@ class _BodyState extends State<Body> {
                           height: 10,
                         ),
                         Text(
-                          'Holidays',
+                          'Calendar',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -514,12 +521,13 @@ class _BodyState extends State<Body> {
                       children: [
                         InkWell(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ExamResult(),
-                              ),
-                            );
+                            ExamBottomDialog();
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => ExamResult(),
+                            //   ),
+                            // );
                           },
                           child: Container(
                             height: 60,
@@ -541,7 +549,7 @@ class _BodyState extends State<Body> {
                           height: 10,
                         ),
                         Text(
-                          'Exam Result',
+                          'Result',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -591,6 +599,42 @@ class _BodyState extends State<Body> {
                         )
                       ],
                     ),
+                  if (!isTeacher! && menuControlData.fEES == 'Y')
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            leaveBottomDialog();
+                          },
+                          child: Container(
+                            height: 60,
+                            width: 60,
+                            decoration:  BoxDecoration(
+                              color: Colors.purple.shade600,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.note_alt_rounded,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'Leave',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black.withOpacity(0.7),
+                          ),
+                        )
+                      ],
+                    ),
                   if (!isTeacher! && menuControlData.fEEDBACK == 'Y')
                     Column(
                       children: [
@@ -607,7 +651,7 @@ class _BodyState extends State<Body> {
                             height: 60,
                             width: 60,
                             decoration: const BoxDecoration(
-                              color: Color.fromARGB(255, 136, 123, 253),
+                              color: Colors.cyan,
                               shape: BoxShape.circle,
                             ),
                             child: const Center(
@@ -726,6 +770,333 @@ class _BodyState extends State<Body> {
       ),
     );
   }
+
+  void CalenderBottomDialog() {
+    showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(25.0),
+          ),
+        ),
+        builder: (context) {
+          return SizedBox(
+            // height: 240,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
+                  child: Row(
+                    children: [
+                      const Expanded(
+                        child: Text(
+                          '',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 18.0),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(Icons.close, size: 22),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                const Divider(height: 5),
+                Container(
+                  height: 200,
+                  // color: Colors.red,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 15,
+                        bottom: 15,
+                        right: 20,left: 20
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+
+                        GestureDetector(
+                          onTap: () {
+                            Get.back();
+                            Get.to(CurMnthHolidayList());
+                            // Get.to(ApplyForLeave());
+                          },
+                          child: Card(
+                            child: ListTile(
+                              title: Text("Holidays"),
+                              trailing: CircleAvatar(
+                                  radius: 15,
+                                  foregroundColor: kThemeColor,
+                                  child: Icon(Icons.arrow_right)
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: 30,),
+
+                        GestureDetector(
+                          onTap: () {
+                            Get.back();
+                            Get.to(AcademicCalender());
+                          },
+                          child: Card(
+                            child: ListTile(
+                              title: Text("Academic Calender"),
+                              trailing: CircleAvatar(
+                                  radius: 15,
+                                  foregroundColor: kThemeColor,
+                                  child: Icon(Icons.arrow_right)
+                              ),
+                            ),
+                          ),
+                        ),
+
+
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15)
+              ],
+            ),
+          );
+        });
+  }
+
+
+  void ExamBottomDialog() {
+    showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(25.0),
+          ),
+        ),
+        builder: (context) {
+          return SizedBox(
+            // height: 240,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
+                  child: Row(
+                    children: [
+                      const Expanded(
+                        child: Text(
+                          '',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 18.0),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(Icons.close, size: 22),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                const Divider(height: 5),
+                Container(
+                  height: 200,
+                  // color: Colors.red,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 15,
+                        bottom: 15,
+                        right: 20,left: 20
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+
+                        GestureDetector(
+                          onTap: () {
+                            Get.back();
+                            Get.to(ExamSchedule());
+                            // Get.to(ApplyForLeave());
+                          },
+                          child: Card(
+                            child: ListTile(
+                              title: Text("Exam Schedule"),
+                              trailing: CircleAvatar(
+                                  radius: 15,
+                                  foregroundColor: kThemeColor,
+                                  child: Icon(Icons.arrow_right)
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: 30,),
+
+                        GestureDetector(
+                          onTap: () {
+                            Get.back();
+                            Get.to(ExamResult());
+                          },
+                          child: Card(
+                            child: ListTile(
+                              title: Text("Exam Result"),
+                              trailing: CircleAvatar(
+                                  radius: 15,
+                                  foregroundColor: kThemeColor,
+                                  child: Icon(Icons.arrow_right)
+                              ),
+                            ),
+                          ),
+                        ),
+
+
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15)
+              ],
+            ),
+          );
+        });
+  }
+
+
+  void leaveBottomDialog() {
+    showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(25.0),
+          ),
+        ),
+        builder: (context) {
+          return SizedBox(
+            // height: 240,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
+                  child: Row(
+                    children: [
+                      const Expanded(
+                        child: Text(
+                          '',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 18.0),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(Icons.close, size: 22),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                const Divider(height: 5),
+                Container(
+                  height: 270,
+                  // color: Colors.red,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: 15,
+                      bottom: 15,
+                      right: 20,left: 20
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+
+                        GestureDetector(
+                          onTap: () {
+                            Get.back();
+                            Get.to(ApplyForLeave());
+                          },
+                          child: Card(
+                            child: ListTile(
+                              title: Text("Apply For Leave"),
+                              trailing: CircleAvatar(
+                                radius: 15,
+                                  foregroundColor: kThemeColor,
+                                  child: Icon(Icons.arrow_right)
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: 10,),
+
+                        GestureDetector(
+                          onTap: () {
+                            Get.back();
+                            Get.to(LeaveSatus());
+                          },
+                          child: Card(
+                            child: ListTile(
+                              title: Text("Leave Status"),
+                              trailing: CircleAvatar(
+                                  radius: 15,
+                                  foregroundColor: kThemeColor,
+                                  child: Icon(Icons.arrow_right)
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: 10,),
+
+
+                        GestureDetector(
+                          onTap: () {
+                            Get.back();
+                            Get.to(LeaveSummery());
+                          },
+                          child: Card(
+                            child: ListTile(
+                              title: Text("Leave Summary"),
+                              trailing: CircleAvatar(
+                                  radius: 15,
+                                  foregroundColor: kThemeColor,
+                                  child: Icon(Icons.arrow_right)
+                              ),
+                            ),
+                          ),
+                        )
+
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15)
+              ],
+            ),
+          );
+        });
+  }
+
 
   Widget _customHdr({required Size size}) {
     return Container(

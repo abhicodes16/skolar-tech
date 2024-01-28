@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import 'style/theme_constants.dart';
 import 'views/splash_page.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
       SystemUiOverlayStyle.light.copyWith(statusBarColor: Colors.transparent),
     );
 
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'SKOLAR TECH',
       debugShowCheckedModeBanner: false,
       navigatorKey: NavigationService.navigatorKey,
