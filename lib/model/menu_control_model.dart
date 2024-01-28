@@ -41,6 +41,7 @@ class MenuControlData {
   String? nOTICE;
   String? hOLIDAY;
   String? fEES;
+  String? lEAVE;
   String? rESULTPUBLISH;
   String? pREVIOUSYEARQUESTIONS;
   String? fEEDBACK;
@@ -57,6 +58,7 @@ class MenuControlData {
       this.nOTICE,
       this.hOLIDAY,
       this.fEES,
+      this.lEAVE,
       this.cOURSECOVERED,
       this.pREVIOUSYEARQUESTIONS,
       this.fEEDBACK,
@@ -73,6 +75,7 @@ class MenuControlData {
     nOTICE = json['NOTICE'];
     hOLIDAY = json['HOLIDAY'];
     fEES = json['FEES'];
+    lEAVE = json['LEAVE'];
     cOURSECOVERED = json['COURSE_COVERED'];
     pREVIOUSYEARQUESTIONS = json['PREVIOUS_YEAR_QUESTIONS'];
     rESULTPUBLISH = json['RESULT_PUBLISH'];
@@ -91,6 +94,7 @@ class MenuControlData {
     data['NOTICE'] = this.nOTICE;
     data['HOLIDAY'] = this.hOLIDAY;
     data['FEES'] = this.fEES;
+    data['LEAVE'] = this.lEAVE;
     data['COURSE_COVERED'] = this.cOURSECOVERED;
     data['PREVIOUS_YEAR_QUESTIONS'] = this.pREVIOUSYEARQUESTIONS;
     data['RESULT_PUBLISH'] = this.rESULTPUBLISH;

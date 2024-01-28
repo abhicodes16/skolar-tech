@@ -410,13 +410,16 @@ class _BodyState extends State<Body> {
                       children: [
                         InkWell(
                           onTap: () {
-                            CalenderBottomDialog();
-                            /*Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CurMnthHolidayList(),
-                              ),
-                            );*/
+                            if (isTeacher!) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CurMnthHolidayList(),
+                                ),
+                              );
+                            } else {
+                              CalenderBottomDialog();
+                            }
                           },
                           child: Container(
                             height: 60,
@@ -599,7 +602,7 @@ class _BodyState extends State<Body> {
                         )
                       ],
                     ),
-                  if (!isTeacher! && menuControlData.fEES == 'Y')
+                  if (isTeacher! && menuControlData.lEAVE == 'Y')
                     Column(
                       children: [
                         InkWell(
@@ -609,7 +612,7 @@ class _BodyState extends State<Body> {
                           child: Container(
                             height: 60,
                             width: 60,
-                            decoration:  BoxDecoration(
+                            decoration: BoxDecoration(
                               color: Colors.purple.shade600,
                               shape: BoxShape.circle,
                             ),
@@ -815,15 +818,11 @@ class _BodyState extends State<Body> {
                   // color: Colors.red,
                   child: Padding(
                     padding: const EdgeInsets.only(
-                        top: 15,
-                        bottom: 15,
-                        right: 20,left: 20
-                    ),
+                        top: 15, bottom: 15, right: 20, left: 20),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-
                         GestureDetector(
                           onTap: () {
                             Get.back();
@@ -836,14 +835,13 @@ class _BodyState extends State<Body> {
                               trailing: CircleAvatar(
                                   radius: 15,
                                   foregroundColor: kThemeColor,
-                                  child: Icon(Icons.arrow_right)
-                              ),
+                                  child: Icon(Icons.arrow_right)),
                             ),
                           ),
                         ),
-
-                        SizedBox(height: 30,),
-
+                        SizedBox(
+                          height: 30,
+                        ),
                         GestureDetector(
                           onTap: () {
                             Get.back();
@@ -855,13 +853,10 @@ class _BodyState extends State<Body> {
                               trailing: CircleAvatar(
                                   radius: 15,
                                   foregroundColor: kThemeColor,
-                                  child: Icon(Icons.arrow_right)
-                              ),
+                                  child: Icon(Icons.arrow_right)),
                             ),
                           ),
                         ),
-
-
                       ],
                     ),
                   ),
@@ -872,7 +867,6 @@ class _BodyState extends State<Body> {
           );
         });
   }
-
 
   void ExamBottomDialog() {
     showModalBottomSheet(
@@ -918,15 +912,11 @@ class _BodyState extends State<Body> {
                   // color: Colors.red,
                   child: Padding(
                     padding: const EdgeInsets.only(
-                        top: 15,
-                        bottom: 15,
-                        right: 20,left: 20
-                    ),
+                        top: 15, bottom: 15, right: 20, left: 20),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-
                         GestureDetector(
                           onTap: () {
                             Get.back();
@@ -939,14 +929,13 @@ class _BodyState extends State<Body> {
                               trailing: CircleAvatar(
                                   radius: 15,
                                   foregroundColor: kThemeColor,
-                                  child: Icon(Icons.arrow_right)
-                              ),
+                                  child: Icon(Icons.arrow_right)),
                             ),
                           ),
                         ),
-
-                        SizedBox(height: 30,),
-
+                        SizedBox(
+                          height: 30,
+                        ),
                         GestureDetector(
                           onTap: () {
                             Get.back();
@@ -958,13 +947,10 @@ class _BodyState extends State<Body> {
                               trailing: CircleAvatar(
                                   radius: 15,
                                   foregroundColor: kThemeColor,
-                                  child: Icon(Icons.arrow_right)
-                              ),
+                                  child: Icon(Icons.arrow_right)),
                             ),
                           ),
                         ),
-
-
                       ],
                     ),
                   ),
@@ -975,7 +961,6 @@ class _BodyState extends State<Body> {
           );
         });
   }
-
 
   void leaveBottomDialog() {
     showModalBottomSheet(
@@ -1021,15 +1006,11 @@ class _BodyState extends State<Body> {
                   // color: Colors.red,
                   child: Padding(
                     padding: const EdgeInsets.only(
-                      top: 15,
-                      bottom: 15,
-                      right: 20,left: 20
-                    ),
+                        top: 15, bottom: 15, right: 20, left: 20),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-
                         GestureDetector(
                           onTap: () {
                             Get.back();
@@ -1039,16 +1020,15 @@ class _BodyState extends State<Body> {
                             child: ListTile(
                               title: Text("Apply For Leave"),
                               trailing: CircleAvatar(
-                                radius: 15,
+                                  radius: 15,
                                   foregroundColor: kThemeColor,
-                                  child: Icon(Icons.arrow_right)
-                              ),
+                                  child: Icon(Icons.arrow_right)),
                             ),
                           ),
                         ),
-
-                        SizedBox(height: 10,),
-
+                        SizedBox(
+                          height: 10,
+                        ),
                         GestureDetector(
                           onTap: () {
                             Get.back();
@@ -1060,15 +1040,13 @@ class _BodyState extends State<Body> {
                               trailing: CircleAvatar(
                                   radius: 15,
                                   foregroundColor: kThemeColor,
-                                  child: Icon(Icons.arrow_right)
-                              ),
+                                  child: Icon(Icons.arrow_right)),
                             ),
                           ),
                         ),
-
-                        SizedBox(height: 10,),
-
-
+                        SizedBox(
+                          height: 10,
+                        ),
                         GestureDetector(
                           onTap: () {
                             Get.back();
@@ -1080,12 +1058,10 @@ class _BodyState extends State<Body> {
                               trailing: CircleAvatar(
                                   radius: 15,
                                   foregroundColor: kThemeColor,
-                                  child: Icon(Icons.arrow_right)
-                              ),
+                                  child: Icon(Icons.arrow_right)),
                             ),
                           ),
                         )
-
                       ],
                     ),
                   ),
@@ -1096,7 +1072,6 @@ class _BodyState extends State<Body> {
           );
         });
   }
-
 
   Widget _customHdr({required Size size}) {
     return Container(
