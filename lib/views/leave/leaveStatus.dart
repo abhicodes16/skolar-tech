@@ -148,11 +148,11 @@ class LeaveSatus_State extends State<LeaveSatus>{
                             width: 90,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: dataIndex.approvalStatus == 'Yes'
+                              color: dataIndex.approvalStatus == 'A'
                                   ? Colors.green.withOpacity(0.8)
-                                  : (dataIndex.approvalStatus == 'No'
+                                  : (dataIndex.approvalStatus == 'R'
                                   ? Colors.red.withOpacity(0.8)
-                                  : Colors.blue.withOpacity(0.8)
+                                  : Colors.orange.withOpacity(0.8)
                               ),
                             ),
                             child: Padding(
@@ -164,10 +164,10 @@ class LeaveSatus_State extends State<LeaveSatus>{
                               ),
                               child: Center(
                                 child: Text(
-                                  dataIndex.approvalStatus == ''
+                                  dataIndex.approvalStatus == 'P'
                                       ? "Pending"
-                                      : (dataIndex.approvalStatus == 'Yes'
-                                      ? "Accepted"
+                                      : (dataIndex.approvalStatus == 'A'
+                                      ? "Approved"
                                       : "Rejected"),
                                   style:  TextStyle(
                                       fontWeight: FontWeight.w500,

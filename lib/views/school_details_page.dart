@@ -53,11 +53,13 @@ class _SchoolDetailsState extends State<SchoolDetails> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
+          _pageView(),
           SizedBox(
             height: _headerHeight,
             child: HeaderWidget(_headerHeight, true),
           ),
-          _pageView(),
+          _appbarImage(),
+
         ],
       ),
     );
@@ -66,25 +68,32 @@ class _SchoolDetailsState extends State<SchoolDetails> {
   Widget _pageView() {
     if (!isloading) {
       return Container(
-        margin: const EdgeInsets.only(top: 60),
+        margin: const EdgeInsets.only(top: 0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _appbarImage(),
-              const SizedBox(height: 70),
-              _buildIconImage(),
+               Container(
+                height: 70,
+                color: kYellow,
+              ),
+              // _buildIconImage(),
               SizedBox(
                 child: ListTile(
-                  tileColor: kYellow,
-                  leading: const Icon(
-                    Icons.school_outlined,
-                    color: kWhite,
-                    size: 40,
+                  contentPadding: EdgeInsets.only(
+                    top: 13,bottom: 13,left: 15,right: 15
                   ),
+                  tileColor: kYellow,
+                  leading: _buildIconImage(),
                   title: _schoolName(),
                 ),
               ),
+
+              SizedBox(
+                height: 15,
+              ),
+
               ListTile(
                 leading: const Icon(
                   Icons.location_on_outlined,
@@ -95,35 +104,31 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                   child: _schoolAddress(),
                 ),
               ),
+
+              SizedBox(
+                height: 10,
+              ),
+
               ListTile(
                 leading: const Icon(
                   Icons.phone_android_outlined,
                   color: kBlue,
                 ),
-                title: Transform.translate(
-                  offset: Offset(-90, 0),
-                  child: _schoolPhone(),
-                ),
+                title:_schoolPhone()
               ),
               ListTile(
                 leading: const Icon(
                   Icons.email,
                   color: kBlue,
                 ),
-                title: Transform.translate(
-                  offset: Offset(-35, 0),
-                  child: _schoolMail(),
-                ),
+                title: _schoolMail()
               ),
               ListTile(
                 leading: const Icon(
                   Icons.language,
                   color: kBlue,
                 ),
-                title: Transform.translate(
-                  offset: Offset(-45, 0),
-                  child: _website(),
-                ),
+                title:_website()
               ),
               _getActionButtons(),
             ],
@@ -150,19 +155,13 @@ class _SchoolDetailsState extends State<SchoolDetails> {
   Widget _schoolMail() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Column(
-            children: [
-              Text(
-                mail ?? '',
-                style: Palette.title,
-                textAlign: TextAlign.center,
-              ),
-            ],
-          )
-        ],
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          mail ?? '',
+          style: Palette.title,
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }
@@ -170,19 +169,13 @@ class _SchoolDetailsState extends State<SchoolDetails> {
   Widget _schoolPhone() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Column(
-            children: [
-              Text(
-                phoneNo ?? '',
-                style: Palette.title,
-                textAlign: TextAlign.center,
-              ),
-            ],
-          )
-        ],
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          phoneNo ?? '',
+          style: Palette.title,
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }
@@ -201,33 +194,47 @@ class _SchoolDetailsState extends State<SchoolDetails> {
     return SizedBox(
       child: Image(
         image: NetworkImage(bannerUrl ?? ''),
+        height: 60,width: 60,
       ),
     );
   }
 
   Widget _website() {
-    return SizedBox(
-      child: Text(
-        website ?? '',
-        style: Palette.title,
-        textAlign: TextAlign.center,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          website ?? '',
+          style: Palette.title,
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }
 
   Widget _appbarImage() {
     return Padding(
-      padding: const EdgeInsets.only(left: 15, right: 15),
+      padding: const EdgeInsets.only(left: 15, right: 15,top: 45),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Image(
+           Image(
             image: NetworkImage('https://ntier.in/skolarlogo.png'),
             width: 70,
           ),
-          Image(
-            image: NetworkImage(logoUrl ?? ''),
-            width: 70,
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white
+            ),
+            child: logoUrl == '' ?
+            SizedBox()
+                :
+            Image(
+              image: NetworkImage(logoUrl ?? ''),
+              width: 70,
+            ),
           ),
         ],
       ),

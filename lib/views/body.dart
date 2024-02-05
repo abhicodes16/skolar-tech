@@ -690,10 +690,15 @@ class _BodyState extends State<Body> {
                       elevation: 5,
                       clipBehavior: Clip.antiAlias,
                       child: InkWell(
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SubjectDetails())),
+                        onTap: () {
+
+                           Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SubjectDetails()
+                              )
+                          );
+                        },
                         child: const Padding(
                           padding: EdgeInsets.all(5.0),
                           child: ListTile(
@@ -773,6 +778,101 @@ class _BodyState extends State<Body> {
       ),
     );
   }
+
+
+  void CourseCoverBottomDialog() {
+    showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(25.0),
+          ),
+        ),
+        builder: (context) {
+          return SizedBox(
+            // height: 240,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
+                  child: Row(
+                    children: [
+                      const Expanded(
+                        child: Text(
+                          '',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 18.0),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(Icons.close, size: 22),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                const Divider(height: 5),
+                Container(
+                  height: 200,
+                  // color: Colors.red,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 15, bottom: 15, right: 20, left: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Get.back();
+                          },
+                          child: Card(
+                            child: ListTile(
+                              title: Text("Holidays"),
+                              trailing: CircleAvatar(
+                                  radius: 15,
+                                  foregroundColor: kThemeColor,
+                                  child: Icon(Icons.arrow_right)),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Get.back();
+                            Get.to(AcademicCalender());
+                          },
+                          child: Card(
+                            child: ListTile(
+                              title: Text("Academic Calender"),
+                              trailing: CircleAvatar(
+                                  radius: 15,
+                                  foregroundColor: kThemeColor,
+                                  child: Icon(Icons.arrow_right)),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15)
+              ],
+            ),
+          );
+        });
+  }
+
+
 
   void CalenderBottomDialog() {
     showModalBottomSheet(
