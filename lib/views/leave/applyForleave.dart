@@ -125,6 +125,9 @@ class ApplyForLeave_State extends State<ApplyForLeave>{
     } finally {
       setState(() {
         loading = false;
+        leavePurposeController.clear();
+        selectedEndDate = DateTime.now();
+        selectedStartDate = DateTime.now();
       });
     }
   }

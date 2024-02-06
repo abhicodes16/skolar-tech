@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pns_skolar/views/courses/course_covered.dart';
+import 'package:pns_skolar/views/homework/upload_homework.dart';
 import 'package:pns_skolar/views/pre_year_que/pre_year_que.dart';
 import 'package:pns_skolar/views/pre_year_que/upload_pre_year_que.dart';
 
@@ -17,9 +18,11 @@ class SubjectDetails extends StatefulWidget {
   bool isAttendace;
   bool isPrevYearQue;
   bool isTeacher;
+  bool isTeacherHomework;
   SubjectDetails({
     super.key,
     this.isAttendace = false,
+    this.isTeacherHomework = false,
     this.isPrevYearQue = false,
     this.isTeacher = true,
   });
@@ -97,6 +100,16 @@ class _SubjectDetailsState extends State<SubjectDetails> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => UploadPreYearQue(
+                        subCode: subjectDetailsModel.data![index].subjectId
+                            .toString(),
+                      ),
+                    ),
+                  );
+                }  else if (widget.isTeacherHomework) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UploadHomework(
                         subCode: subjectDetailsModel.data![index].subjectId
                             .toString(),
                       ),

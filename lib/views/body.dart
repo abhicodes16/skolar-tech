@@ -18,6 +18,7 @@ import 'package:pns_skolar/views/leave/leaveSummery.dart';
 import 'package:pns_skolar/views/news/news.dart';
 import 'package:pns_skolar/views/notice/notice.dart';
 import 'package:pns_skolar/views/pre_year_que/select_class_sem.dart';
+import 'package:pns_skolar/views/pre_year_que/upload_que_history.dart';
 import 'package:pns_skolar/views/profile/TeacherProfile.dart';
 import 'package:pns_skolar/views/profile/profile.dart';
 import 'package:pns_skolar/views/school_code_screen.dart';
@@ -638,6 +639,79 @@ class _BodyState extends State<Body> {
                         )
                       ],
                     ),
+                  //New Added for Teacher
+                  if (isTeacher! && menuControlData.hOMEWORK == 'Y')
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SubjectDetails(
+                                  isTeacherHomework: true,
+                                  isTeacher: true,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Stack(
+                            children: [
+                              Container(
+                                height: 60,
+                                width: 60,
+                                decoration: const BoxDecoration(
+                                  color: Color.fromARGB(255, 255, 175, 1),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.menu_book_rounded,
+                                    color: Colors.white,
+                                    size: 30,
+                                  ),
+                                ),
+                              ),
+                              unreadHomework.isNotEmpty && unreadHomework != '0'
+                                  ? Positioned(
+                                top: 0,
+                                right: 0,
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(26.0)),
+                                  color: Colors.white,
+                                  elevation: 8,
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        6, 2, 6, 2),
+                                    child: Text(
+                                      unreadHomework,
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 12.5,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                                  : const SizedBox(),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'Homework',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black.withOpacity(0.7),
+                          ),
+                        )
+                      ],
+                    ),
                   if (!isTeacher! && menuControlData.fEEDBACK == 'Y')
                     Column(
                       children: [
@@ -719,24 +793,8 @@ class _BodyState extends State<Body> {
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
                     onTap: () {
-                      if (isTeacher!) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SubjectDetails(
-                              isPrevYearQue: true,
-                              isTeacher: true,
-                            ),
-                          ),
-                        );
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SelectClassSem(),
-                          ),
-                        );
-                      }
+                      PreYearQueBottomDialog();
+
                     },
                     child: const Padding(
                       padding: EdgeInsets.all(5.0),
@@ -780,7 +838,7 @@ class _BodyState extends State<Body> {
   }
 
 
-  void CourseCoverBottomDialog() {
+  void PreYearQueBottomDialog() {
     showModalBottomSheet(
         context: context,
         shape: const RoundedRectangleBorder(
@@ -832,10 +890,28 @@ class _BodyState extends State<Body> {
                         GestureDetector(
                           onTap: () {
                             Get.back();
+                            if (isTeacher!) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SubjectDetails(
+                                    isPrevYearQue: true,
+                                    isTeacher: true,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SelectClassSem(),
+                                ),
+                              );
+                            }
                           },
                           child: Card(
                             child: ListTile(
-                              title: Text("Holidays"),
+                              title: Text("Upload Previous Year Questions"),
                               trailing: CircleAvatar(
                                   radius: 15,
                                   foregroundColor: kThemeColor,
@@ -849,11 +925,11 @@ class _BodyState extends State<Body> {
                         GestureDetector(
                           onTap: () {
                             Get.back();
-                            Get.to(AcademicCalender());
+                            Get.to(QuestionHistory());
                           },
                           child: Card(
                             child: ListTile(
-                              title: Text("Academic Calender"),
+                              title: Text("Previous Year Questions History"),
                               trailing: CircleAvatar(
                                   radius: 15,
                                   foregroundColor: kThemeColor,

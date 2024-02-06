@@ -103,6 +103,14 @@ class ApiConstant {
   static const String VIEw_EXAM_SCHEDULE = '$API_URL/postExamSchedule';
 
 
+  static const String QUESTION_HISTORY = '$API_URL/getQuestionsUploadHistoryByTeacherId';
+  static const String DELETE_QUESTIONS = '$API_URL/postPreviousYearQuestionsDeleteById';
+
+
+
+  static const String UPLOAD_HOMEWORK = '$API_URL/postPreviousYearQuestionsDeleteById';
+
+
 
 
   static const String ACADEMIC_CALENDAR = '$API_URL/postAcademicCalendar';
