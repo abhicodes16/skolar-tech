@@ -39,6 +39,8 @@ class _StudentListState extends State<StudentList> {
   TypeData _selectedReportType = TypeData();
   List<bool> selectedCheckbox = [];
 
+  bool selectedAll = true;
+
   @override
   void initState() {
     getTypeApi();
@@ -53,26 +55,49 @@ class _StudentListState extends State<StudentList> {
           'Student Details List',
           style: Palette.appbarTitle,
         ),
+        actions: [
+
+          Padding(
+            padding: const EdgeInsets.only(right: 25),
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  selectedAll = !selectedAll;
+                  for (var i = 0; i < selectedCheckbox.length; i++) {
+                    selectedCheckbox[i] = selectedAll;
+                  }
+                });
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(child: Text("All",style: Palette.whiteBtnTxt,)),
+
+                  SizedBox(width: 10,),
+
+                  Container(
+                    height: 20,width: 20,
+                    decoration: BoxDecoration(
+                        border: Border.all(width: 1.5,color: Colors.white)
+                    ),
+                    child: Center(child: Icon(
+                      Icons.done,size: 13,color:
+                    selectedAll == true ?
+                    Colors.white
+                        :
+                    Colors.transparent,
+                    )
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )
+
+        ],
         flexibleSpace: Container(
           decoration: Palette.appbarGradient,
         ),
-        // actions: [
-        //   Row(
-        //     children: [
-        //       IconButton(
-        //         onPressed: () {
-        //           Navigator.push(
-        //             context,
-        //             MaterialPageRoute(
-        //               builder: (context) => AttendanceHdr(),
-        //             ),
-        //           );
-        //         },
-        //         icon: Icon(CupertinoIcons.calendar_today),
-        //       )
-        //     ],
-        //   )
-        // ],
       ),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,

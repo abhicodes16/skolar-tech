@@ -22,6 +22,7 @@ import 'package:pns_skolar/views/pre_year_que/upload_que_history.dart';
 import 'package:pns_skolar/views/profile/TeacherProfile.dart';
 import 'package:pns_skolar/views/profile/profile.dart';
 import 'package:pns_skolar/views/school_code_screen.dart';
+import 'package:pns_skolar/views/test/test_details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../bloc/menu_control_bloc.dart';
@@ -703,7 +704,72 @@ class _BodyState extends State<Body> {
                           height: 10,
                         ),
                         Text(
-                          'Homework',
+                          'Assignment',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black.withOpacity(0.7),
+                          ),
+                        )
+                      ],
+                    ),
+                  if (isTeacher! && menuControlData.hOMEWORK == 'Y')
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Get.to(()=>TestDetails());
+                          },
+                          child: Stack(
+                            children: [
+                              Container(
+                                height: 60,
+                                width: 60,
+                                decoration: const BoxDecoration(
+                                  color: Color.fromRGBO(211, 31, 156, 1),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Center(
+                                  child: Icon(CupertinoIcons.text_badge_star,
+                                    color: Colors.white,
+                                    size: 30,
+                                  ),
+                                ),
+                              ),
+
+
+                              unreadHomework.isNotEmpty && unreadHomework != '0'
+                                  ? Positioned(
+                                top: 0,
+                                right: 0,
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(26.0)),
+                                  color: Colors.white,
+                                  elevation: 8,
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        6, 2, 6, 2),
+                                    child: Text(
+                                      unreadHomework,
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 12.5,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                                  : const SizedBox(),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'Test',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
