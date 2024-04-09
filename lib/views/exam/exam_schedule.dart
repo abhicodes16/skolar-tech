@@ -13,16 +13,14 @@ import '../../style/palette.dart';
 import '../../utils/api_constant.dart';
 import '../../widget/error_dialouge.dart';
 
-class ExamSchedule extends StatefulWidget{
+class ExamSchedule extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return ExamSchedule_State();
   }
 }
 
-class ExamSchedule_State extends State<ExamSchedule>{
-
-
+class ExamSchedule_State extends State<ExamSchedule> {
   List<Color> availableColors = [
     Colors.red.withOpacity(0.7),
     Colors.green.withOpacity(0.7),
@@ -55,7 +53,6 @@ class ExamSchedule_State extends State<ExamSchedule>{
   var width = Get.width;
   var height = Get.height;
 
-
   var schoolCode;
   var token;
 
@@ -77,22 +74,22 @@ class ExamSchedule_State extends State<ExamSchedule>{
       'schoolCode': '$schoolCode',
     };
 
-    final uri = Uri.parse(ApiConstant.GET_EXAM_DECLARATION).replace(
-        queryParameters: params);
+    final uri = Uri.parse(ApiConstant.GET_EXAM_DECLARATION)
+        .replace(queryParameters: params);
 
-
-    final response = await http.get(uri,
+    final response = await http.get(
+      uri,
       headers: {
         'Content-Type': 'application/json',
         'apikey': ApiConstant.API_KEY,
-        'token' : token
+        'token': token
       },
     );
 
     if (response.statusCode == 200) {
       try {
-        final getExamDeclaration examDeclaration = getExamDeclaration.fromJson(
-            json.decode(response.body));
+        final getExamDeclaration examDeclaration =
+            getExamDeclaration.fromJson(json.decode(response.body));
 
         setState(() {
           ExamData = examDeclaration.data ?? [];
@@ -101,7 +98,7 @@ class ExamSchedule_State extends State<ExamSchedule>{
         ErrorDialouge.showErrorDialogue(
             context, "Something is Wrong please try again later");
         print('Error decoding JSON: $e');
-      }finally{
+      } finally {
         setState(() {
           loading = false;
         });
@@ -109,8 +106,8 @@ class ExamSchedule_State extends State<ExamSchedule>{
     } else {
       ErrorDialouge.showErrorDialogue(
           context, "Something is Wrong please try again later");
-      print('Error: ${response.reasonPhrase}, Status Code: ${response
-          .statusCode}');
+      print(
+          'Error: ${response.reasonPhrase}, Status Code: ${response.statusCode}');
     }
   }
 
@@ -123,207 +120,188 @@ class ExamSchedule_State extends State<ExamSchedule>{
 
   String extractDate(String dateTimeString) {
     DateTime dateTime = DateTime.parse(dateTimeString);
-    String formattedDate = "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
+    String formattedDate =
+        "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
     return formattedDate;
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Exam Schedule', style: Palette.appbarTitle),
-        flexibleSpace: Container(decoration: Palette.appbarGradient),
-        elevation: 0,
-      ),
-      body:
-      loading ?
-      Center(child: SizedBox(height: 40,width: 40,child: CircularProgressIndicator()),)
-          :
-      _examList()
-    );
+        appBar: AppBar(
+          title: Text('Exam Schedule', style: Palette.appbarTitle),
+          flexibleSpace: Container(decoration: Palette.appbarGradient),
+          elevation: 0,
+        ),
+        body: loading
+            ? Center(
+                child: SizedBox(
+                    height: 40, width: 40, child: CircularProgressIndicator()),
+              )
+            : ExamData.isEmpty
+                ? Center(
+                child: Text("No Data Found..!"),
+                  )
+                : _examList());
   }
 
-  Widget _examList(){
+  Widget _examList() {
     return ListView.builder(
       itemCount: ExamData.length,
-      itemBuilder:  (context, index) {
-
+      itemBuilder: (context, index) {
         final dataIndex = ExamData[index];
-
 
         Color containerColor = getRandomColor();
 
-        return  Padding(
+        return Padding(
           padding: const EdgeInsets.all(15.0),
           child: GestureDetector(
             onTap: () {
               Get.to(ViewExamSchedule(),
-              arguments: {
-                'declarationId' : dataIndex.declarationId
-              }
-              );
+                  arguments: {'declarationId': dataIndex.declarationId});
             },
             child: Card(
               clipBehavior: Clip.hardEdge,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5)
-              ),
+                  borderRadius: BorderRadius.circular(5)),
               elevation: 4,
               shadowColor: kThemeColor,
               child: Container(
-                width: width*0.9,
+                width: width * 0.9,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     Container(
                       width: width,
                       height: 10,
-                      color:containerColor,
+                      color: containerColor,
                     ),
-
-                    SizedBox(height: 10,),
-
+                    SizedBox(
+                      height: 10,
+                    ),
                     Padding(
-                      padding: const EdgeInsets.only(
-                          left: 15,right: 15
-                      ),
+                      padding: const EdgeInsets.only(left: 15, right: 15),
                       child: Column(
                         children: [
-
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
-                                child: Text(dataIndex.examName ?? "",
+                                child: Text(
+                                  dataIndex.examName ?? "",
                                   style: TextStyle(
-                                      color:containerColor,
+                                      color: containerColor,
                                       fontSize: 17,
-                                      fontWeight: FontWeight.w600
-                                  ),
+                                      fontWeight: FontWeight.w600),
                                 ),
                               ),
-
-
-                              Text(extractDate(dataIndex.examDate ?? ""),
+                              Text(
+                                extractDate(dataIndex.examDate ?? ""),
                                 style: TextStyle(
-                                    color:kThemeColor,
+                                    color: kThemeColor,
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w600
-                                ),
+                                    fontWeight: FontWeight.w600),
                               )
-
                             ],
                           ),
-
-                          SizedBox(height: 9,),
-
+                          SizedBox(
+                            height: 9,
+                          ),
                           Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(dataIndex.examTitle ?? "",
+                            child: Text(
+                              dataIndex.examTitle ?? "",
                               style: TextStyle(
-                                  color:kThemeColor,
+                                  color: kThemeColor,
                                   fontSize: 15,
-                                  fontWeight: FontWeight.w600
-                              ),
+                                  fontWeight: FontWeight.w600),
                             ),
                           ),
-
-                          SizedBox(height: 9,),
-
-
-                          Row(
-                            children: [
-
-                              _titleText("Scheduled :  "),
-
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: dataIndex.isScheduled == "Y" ? Colors.green : Colors.red.withOpacity(0.5),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10,right: 10,bottom: 5,top: 5
-                                  ),
-                                  child: Text(dataIndex.isScheduled == "Y" ? "Yes" : "No",
-                                    style: TextStyle(
-                                        color:Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              Expanded(child: SizedBox()),
-
-                              _titleText("Marks Published :  "),
-
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: dataIndex.isMarkPublished == "Y" ? Colors.green : Colors.red,
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10,right: 10,bottom: 5,top: 5
-                                  ),
-                                  child: Text(dataIndex.isMarkPublished == "Y" ? "Yes" : "No",
-                                    style: TextStyle(
-                                        color:Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600
-                                    ),
-                                  ),
-                                ),
-                              )
-
-
-                            ],
+                          SizedBox(
+                            height: 9,
                           ),
-
-                          SizedBox(height: 9,),
-
-
                           Row(
                             children: [
-
-                              _titleText("Backpapers Entered :  "),
-
+                              _titleText("Scheduled :  "),
                               Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: dataIndex.isBackpapersEntered  == "Y" ?  Colors.green :  Colors.red,
+                                  color: dataIndex.isScheduled == "Y"
+                                      ? Colors.green
+                                      : Colors.red.withOpacity(0.5),
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 10,right: 10,bottom: 5,top: 5
-                                  ),
-                                  child: Text(dataIndex.isBackpapersEntered  == "Y" ? "Yes" : "No",
+                                      left: 10, right: 10, bottom: 5, top: 5),
+                                  child: Text(
+                                    dataIndex.isScheduled == "Y" ? "Yes" : "No",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 14,
-                                        fontWeight: FontWeight.w600
-                                    ),
+                                        fontWeight: FontWeight.w600),
                                   ),
                                 ),
                               ),
-
-
-
+                              Expanded(child: SizedBox()),
+                              _titleText("Marks Published :  "),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: dataIndex.isMarkPublished == "Y"
+                                      ? Colors.green
+                                      : Colors.red,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10, bottom: 5, top: 5),
+                                  child: Text(
+                                    dataIndex.isMarkPublished == "Y"
+                                        ? "Yes"
+                                        : "No",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                              )
                             ],
                           ),
-
+                          SizedBox(
+                            height: 9,
+                          ),
+                          Row(
+                            children: [
+                              _titleText("Backpapers Entered :  "),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: dataIndex.isBackpapersEntered == "Y"
+                                      ? Colors.green
+                                      : Colors.red,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10, bottom: 5, top: 5),
+                                  child: Text(
+                                    dataIndex.isBackpapersEntered == "Y"
+                                        ? "Yes"
+                                        : "No",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
-
-                    SizedBox(height: 10,),
-
+                    SizedBox(
+                      height: 10,
+                    ),
                   ],
                 ),
               ),
@@ -334,13 +312,11 @@ class ExamSchedule_State extends State<ExamSchedule>{
     );
   }
 
-  Widget _titleText(title){
-    return Text(title,
+  Widget _titleText(title) {
+    return Text(
+      title,
       style: TextStyle(
-          color:kThemeColor,
-          fontSize: 14,
-          fontWeight: FontWeight.w600
-      ),
+          color: kThemeColor, fontSize: 14, fontWeight: FontWeight.w600),
     );
   }
 }

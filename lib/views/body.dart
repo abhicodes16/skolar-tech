@@ -157,47 +157,6 @@ class _BodyState extends State<Body> {
                 crossAxisCount: 3,
                 childAspectRatio: 1.1,
                 children: [
-                  if (menuControlData.nOTIFICATIONS == 'Y')
-                    Column(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => NotificationType(),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            height: 60,
-                            width: 60,
-                            decoration: const BoxDecoration(
-                              color: Color(0xFFFFCF2F),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Center(
-                              child: Icon(
-                                Icons.notifications,
-                                color: Colors.white,
-                                size: 30,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Notification',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black.withOpacity(0.7),
-                          ),
-                        )
-                      ],
-                    ),
                   if (menuControlData.pROFILE == 'Y')
                     Column(
                       children: [
@@ -248,6 +207,7 @@ class _BodyState extends State<Body> {
                         )
                       ],
                     ),
+
                   if (menuControlData.aTTENDANCE == 'Y')
                     Column(
                       children: [
@@ -255,18 +215,18 @@ class _BodyState extends State<Body> {
                           onTap: () {
                             isTeacher!
                                 ? Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const AttendanceDetails(),
-                                    ),
-                                  )
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                const AttendanceDetails(),
+                              ),
+                            )
                                 : Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => Attendance(),
-                                    ),
-                                  );
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Attendance(),
+                              ),
+                            );
                           },
                           child: Container(
                             height: 60,
@@ -297,6 +257,7 @@ class _BodyState extends State<Body> {
                         )
                       ],
                     ),
+
                   if (menuControlData.nOTICE == 'Y')
                     Column(
                       children: [
@@ -328,27 +289,27 @@ class _BodyState extends State<Body> {
                               ),
                               unread.isNotEmpty && unread != '0'
                                   ? Positioned(
-                                      top: 0,
-                                      right: 0,
-                                      child: Card(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(26.0)),
-                                        color: Colors.white,
-                                        elevation: 8,
-                                        child: Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              6, 2, 6, 2),
-                                          child: Text(
-                                            unread,
-                                            style: TextStyle(
-                                              color: Colors.red,
-                                              fontSize: 12.5,
-                                            ),
-                                          ),
-                                        ),
+                                top: 0,
+                                right: 0,
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(26.0)),
+                                  color: Colors.white,
+                                  elevation: 8,
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        6, 2, 6, 2),
+                                    child: Text(
+                                      unread,
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 12.5,
                                       ),
-                                    )
+                                    ),
+                                  ),
+                                ),
+                              )
                                   : const SizedBox(),
                             ],
                           ),
@@ -366,6 +327,49 @@ class _BodyState extends State<Body> {
                         )
                       ],
                     ),
+
+                  if (menuControlData.nOTIFICATIONS == 'Y')
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => NotificationType(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            height: 60,
+                            width: 60,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFFFFCF2F),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.notifications,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'Notification',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black.withOpacity(0.7),
+                          ),
+                        )
+                      ],
+                    ),
+
                   if (menuControlData.nEWS == 'Y')
                     Column(
                       children: [
@@ -512,7 +516,7 @@ class _BodyState extends State<Body> {
                           height: 10,
                         ),
                         Text(
-                          'Homework',
+                          'Assignment',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -554,7 +558,7 @@ class _BodyState extends State<Body> {
                           height: 10,
                         ),
                         Text(
-                          'Result',
+                          'Exam',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -850,28 +854,53 @@ class _BodyState extends State<Body> {
                     ),
                   )
                 : const SizedBox(),
-            if (menuControlData.pREVIOUSYEARQUESTIONS == 'Y')
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 15, right: 15, top: 5, bottom: 5),
-                child: Card(
-                  elevation: 5,
-                  clipBehavior: Clip.antiAlias,
-                  child: InkWell(
-                    onTap: () {
-                      PreYearQueBottomDialog();
-
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: ListTile(
-                        title: Text('Previous Year Questions'),
-                        trailing: Icon(CupertinoIcons.arrow_right),
-                      ),
+            !isTeacher! && menuControlData.pREVIOUSYEARQUESTIONS == 'Y' ?
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 15, right: 15, top: 5, bottom: 5),
+              child: Card(
+                elevation: 5,
+                clipBehavior: Clip.antiAlias,
+                child: InkWell(
+                  onTap: () {
+                      Get.to(QuestionHistory());
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: ListTile(
+                      title: Text("Download Previous Year Questions"),
+                      trailing: Icon(CupertinoIcons.arrow_right),
                     ),
                   ),
                 ),
               ),
+            )
+            :
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 15, right: 15, top: 5, bottom: 5),
+              child: Card(
+                elevation: 5,
+                clipBehavior: Clip.antiAlias,
+                child: InkWell(
+                  onTap: () {
+                    if(isTeacher! && menuControlData.pREVIOUSYEARQUESTIONS == 'Y'){
+                      PreYearQueBottomDialog();
+                    }else{
+                      Get.to(QuestionHistory());
+                    }
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: ListTile(
+                      title: Text("Previous Year Questions"),
+                      trailing: Icon(CupertinoIcons.arrow_right),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
             Padding(
               padding:
                   const EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),

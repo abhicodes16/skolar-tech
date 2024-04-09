@@ -111,6 +111,10 @@ class ApiConstant {
   static const String UPLOAD_HOMEWORK = '$API_URL/postPreviousYearQuestionsDeleteById';
 
 
+  static const String GET_EXAMTYPE = '$API_URL/getExamTypeName';
+  static const String INSERT_MARKS = '$API_URL/postStudentIACTMarkInsert';
+
+
 
 
   static const String ACADEMIC_CALENDAR = '$API_URL/postAcademicCalendar';

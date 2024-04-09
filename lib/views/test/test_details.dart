@@ -1,10 +1,23 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 import 'package:pns_skolar/views/test/fill_students_marks.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../model/course/class_select_model.dart';
+import '../../model/course/semester_select_model.dart';
+import '../../model/course/subject_details_model.dart';
+import '../../model/test/get_exam_type.dart';
+import '../../repo/Course/select_class_repo.dart';
+import '../../repo/Course/subject_info_repo.dart';
 import '../../style/palette.dart';
 import '../../style/theme_constants.dart';
+import '../../utils/api_constant.dart';
+import '../../widget/error_dialouge.dart';
+import '../../widget/loading_dialogue.dart';
 
 class TestDetails extends StatefulWidget{
   @override
@@ -22,75 +35,29 @@ class TestDetails_State extends State<TestDetails>{
 
   TextEditingController _testDateController = TextEditingController();
 
-
   String? selectedTypeValue;
-  var _selectTypeList = [
-    {
-      "Id": "1",
-      "type" : "IA"
-    },
-    {
-      "Id": "2",
-      "type" : "CT"
-    },
-  ];
+  List<Data> data = [];
 
-
-  String? selectedSemValue;
-  var _selectSemList = [
-    {
-      "name": "1",
-      "code" : "st"
-    },
-    {
-      "name": "2",
-      "code" : "nd"
-    },
-    {
-      "name": "3",
-      "code" : "rd"
-    },
-    {
-      "name": "4",
-      "code" : "th"
-    },
-    {
-      "name": "5",
-      "code" : "th"
-    },
-    {
-      "name": "6",
-      "code" : "th"
-    },
-  ];
-
-
-
+  List<SubjectData> _selectSubModelList = [];
   String? selectedSubValue;
-  var _selectSubList = [
-    {
-      "name": "ENG. PHYSICS",
-      "Id" : "1"
-    },
-    {
-      "name": "ENG. MATHS",
-      "Id" : "2"
-    },
-    {
-      "name": "ENG. CHEMISTRY",
-      "Id" : "3"
-    },
-    {
-      "name": "ENG. LAB",
-      "Id" : "4"
-    },
-  ];
+
+  List<SemesterSelectDataModel> _selectSemesterModelList = [];
+  int? selectedSemValue;
+
+  List<ClassSelectDataModel> _selectClassModelList = [];
+  int? selectedValue;
+
+  bool loading = false;
+  var schoolCode;
+  var token;
+
 
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getExamType();
     DateTime currentDate = DateTime.now();
     String formattedDate = DateFormat('dd/MM/yyyy').format(currentDate);
     String formattedDate2 = DateFormat('MM/dd/yyyy').format(currentDate);
@@ -122,7 +89,8 @@ class TestDetails_State extends State<TestDetails>{
                      selectDatePicker(),
                      _selectExamType(),
                      _selectSubWidget(),
-                     _selectSemesterWidget()
+                     _selectSemesterWidget(),
+                     _selectBranchWidget()
                    ],
                  ),
                ),
@@ -147,19 +115,19 @@ class TestDetails_State extends State<TestDetails>{
           margin: const EdgeInsets.fromLTRB(20, 5, 20, 5),
           width: MediaQuery.of(context).size.width,
           child: Wrap(
-            children: List.generate(_selectSubList.length, (i) {
+            children: List.generate(_selectSubModelList.length, (i) {
               return InkWell(
                 onTap: () {
                   setState(() {
                     selectedSubValue =
-                        _selectSubList[i]["Id"].toString();
+                        _selectSubModelList[i].subjectId.toString();
                   });
                 },
                 child: Card(
                   elevation: 0,
                   shape: Palette.cardShape,
-                  color: selectedSubValue ==
-                      _selectSubList[i]["Id"].toString()
+                  color:selectedSubValue ==
+                      _selectSubModelList[i].subjectId.toString()
                       ? Colors.indigo
                       : Colors.indigo.withOpacity(0.1),
                   child: Padding(
@@ -168,14 +136,21 @@ class TestDetails_State extends State<TestDetails>{
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          '${_selectSubList[i]["name"]}',
+                          '${_selectSubModelList[i].subjectName}',
                           style: selectedSubValue ==
-                              _selectSubList[i]["Id"].toString()
-                              ? Palette.titleWhiteS
-                              : Palette.titleS,
+                              _selectSubModelList[i].subjectId.toString()
+                              ?TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12.0,
+                            color: Colors.white,
+                          )
+                              :  TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12.0,
+                          ),
                         ),
 
-                        SizedBox(width: 30,),
+                        SizedBox(width: 10,),
 
 
                         Container(
@@ -187,7 +162,8 @@ class TestDetails_State extends State<TestDetails>{
                           child: Center(child: Icon(
                             Icons.circle,size: 13,color:
                           selectedSubValue ==
-                              _selectSubList[i]['Id'] ?
+                              _selectSubModelList[i].subjectId.toString()
+                              ?
                           Colors.white
                               :
                           Colors.transparent,
@@ -219,19 +195,21 @@ class TestDetails_State extends State<TestDetails>{
           margin: const EdgeInsets.fromLTRB(20, 5, 20, 5),
           width: MediaQuery.of(context).size.width,
           child: Wrap(
-            children: List.generate(_selectSemList.length, (i) {
+            children: List.generate(_selectSemesterModelList.length, (i) {
+              String semName =
+                  _selectSemesterModelList[i].semesterName ?? '???';
 
               return InkWell(
                 onTap: () {
                   setState(() {
-                    selectedSemValue = _selectSemList[i]['code'];
+                    selectedSemValue = _selectSemesterModelList[i].sEMECODE;
                   });
                 },
                 child: Card(
                   elevation: 0,
                   shape: Palette.cardShape,
                   color:
-                  selectedSemValue == _selectSemList[i]['code']
+                  selectedSemValue == _selectSemesterModelList[i].sEMECODE
                       ? Colors.amber[700]
                       : Colors.amber.withOpacity(0.1),
                   child: Padding(
@@ -244,17 +222,17 @@ class TestDetails_State extends State<TestDetails>{
                           Wrap(
                             children: [
                               Text(
-                                '${_selectSemList[i]['name']}',
+                                  '${semName[0]}',
                                 style: selectedSemValue ==
-                                    _selectSemList[i]['code']
+                                    _selectSemesterModelList[i].sEMECODE
                                     ? Palette.titlez
-                                    : Palette.title,
+                                    : Palette.title
                               ),
                               const SizedBox(width: 1),
                               Text(
-                                '${_selectSemList[i]['code']}',
+                                '${semName[1]}${semName[2]}',
                                 style: selectedSemValue ==
-                                    _selectSemList[i]["code"]
+                                    _selectSemesterModelList[i].sEMECODE
                                     ? const TextStyle(
                                   fontWeight: FontWeight.w400,
                                   fontSize: 10.0,
@@ -279,7 +257,7 @@ class TestDetails_State extends State<TestDetails>{
                             child: Center(child: Icon(
                               Icons.circle,size: 13,color:
                             selectedSemValue ==
-                                _selectSemList[i]['code'] ?
+                                _selectSemesterModelList[i].sEMECODE ?
                             Colors.white
                                 :
                             Colors.transparent,
@@ -313,12 +291,12 @@ class TestDetails_State extends State<TestDetails>{
             margin: const EdgeInsets.fromLTRB(20, 5, 20, 5),
             width: MediaQuery.of(context).size.width,
             child: Wrap(
-              children: List.generate(_selectTypeList.length, (index) {
+              children: List.generate(data.length, (index) {
                 return InkWell(
                   onTap: () {
                     setState(() {
                       selectedTypeValue =
-                          _selectTypeList[index]['Id'].toString();
+                          data[index].examTypeId.toString();
                     });
                   },
                   child: Card(
@@ -326,7 +304,7 @@ class TestDetails_State extends State<TestDetails>{
                     clipBehavior: Clip.hardEdge,
                     shape: Palette.cardShape,
                     color: selectedTypeValue ==
-                        _selectTypeList[index]['Id'].toString()
+                        data[index].examTypeId.toString()
                         ? Colors.pink
                         : Colors.pink.withOpacity(0.1),
                     child: Padding(
@@ -335,9 +313,9 @@ class TestDetails_State extends State<TestDetails>{
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            '${_selectTypeList[index]['type']}',
+                            '${data[index].examTypeName}',
                             style: selectedTypeValue ==
-                                _selectTypeList[index]['Id'].toString()
+                                data[index].examTypeId.toString()
                                 ? Palette.titleWhiteS
                                 : Palette.titleS,
                           ),
@@ -352,8 +330,8 @@ class TestDetails_State extends State<TestDetails>{
                             ),
                             child: Center(child: Icon(
                               Icons.circle,size: 18,color:
-                            selectedTypeValue ==
-                                _selectTypeList[index]['Id'].toString()?
+                           selectedTypeValue ==
+                                data[index].examTypeId.toString() ?
                             Colors.white
                                 :
                             Colors.transparent,
@@ -431,7 +409,18 @@ class TestDetails_State extends State<TestDetails>{
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          Get.to(()=>FillMarks());
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FillMarks(
+                cLS_CODE: selectedValue.toString(),
+                sEME_CODE: selectedSemValue.toString(),
+                sUBID: selectedSubValue ?? '',
+                examTypeId: selectedTypeValue.toString(),
+                markEntityDate: _testDateController.text.toString(),
+              ),
+            ),
+          );
         },
         style: ElevatedButton.styleFrom(
           elevation: 5,
@@ -482,6 +471,321 @@ class TestDetails_State extends State<TestDetails>{
       labelStyle: const TextStyle(color: Colors.grey),
     );
   }
+
+  Widget _selectBranchWidget() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.fromLTRB(25, 10, 25, 5),
+          child: Text('Branch :', style: Palette.title),
+        ),
+        Container(
+          margin: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+          width: MediaQuery.of(context).size.width,
+          child: Wrap(
+            children: List.generate(_selectClassModelList.length, (i) {
+              return InkWell(
+                onTap: () {
+                  setState(() {
+                    selectedValue = _selectClassModelList[i].cLSCODE;
+                  });
+                },
+                child: Card(
+                  elevation: 0,
+                  shape: Palette.cardShape,
+                  color:
+                  selectedValue == _selectClassModelList[i].cLSCODE
+                      ? Colors.green
+                      : Colors.green.withOpacity(0.1),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(13, 12, 12, 13),
+                    child: SizedBox(
+                      height: 18,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                              '${_selectClassModelList[i].cLSNAME}',
+                              style: selectedValue ==
+                                  _selectClassModelList[i].cLSCODE
+                                  ? TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 13.0,
+                                color: Colors.white,
+                              )
+                                  : TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 13.0,
+                              )
+                          ),
+
+                          SizedBox(width: 20,),
+
+                          Container(
+                            height: 20,width: 20,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(width: 1.5,color: Colors.white)
+                            ),
+                            child: Center(child: Icon(
+                              Icons.circle,size: 13,color:
+                            selectedValue ==
+                                _selectClassModelList[i].cLSCODE ?
+                            Colors.white
+                                :
+                            Colors.transparent,
+                            )
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _selectClass2Widget() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.fromLTRB(25, 10, 25, 5),
+          child: Text('Branch :', style: Palette.title),
+        ),
+        Container(
+          margin: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+          width: MediaQuery.of(context).size.width,
+          child: Row(
+            children: [
+              Wrap(
+                children: List.generate(_selectClassModelList.length, (i) {
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectedValue = _selectClassModelList[i].cLSCODE;
+                      });
+                    },
+                    child: Card(
+                      elevation: 0,
+                      shape: Palette.cardShape,
+                      color: selectedValue == _selectClassModelList[i].cLSCODE
+                          ? Colors.green
+                          : Colors.green.withOpacity(0.1),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              '${_selectClassModelList[i].cLSNAME}',
+                              style: selectedValue == _selectClassModelList[i].cLSCODE
+                                  ? Palette.titleWhiteS
+                                  : Palette.titleS,
+                            ),
+
+                            SizedBox(width: 20,),
+
+                            Container(
+                              height: 20,width: 20,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(width: 1.5,color: Colors.white)
+                              ),
+                              child: Center(child: Icon(
+                                Icons.circle,size: 13,color:
+                              selectedValue == _selectClassModelList[i].cLSCODE ?
+                              Colors.white
+                                  :
+                              Colors.transparent,
+                              )
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+
+
+
+
+
+  Future<void> getExamType() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      schoolCode = pref.getString('schoolCode');
+      token = pref.getString('token');
+      loading = true;
+      print("--->$token");
+    });
+
+    final params = {
+      'schoolCode': '$schoolCode',
+    };
+
+    final uri = Uri.parse(ApiConstant.GET_EXAMTYPE)
+        .replace(queryParameters: params);
+
+    final response = await http.get(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': ApiConstant.API_KEY,
+        'token': token
+      },
+    );
+
+    if (response.statusCode == 200) {
+      try {
+        final getExamTypeModel _examtype =
+        getExamTypeModel.fromJson(json.decode(response.body));
+
+        setState(() {
+          data = _examtype.data ?? [];
+          selectedTypeValue = data[0].examTypeId.toString();
+          selectSubjectApi();
+        });
+      } catch (e) {
+        ErrorDialouge.showErrorDialogue(
+            context, "Something is Wrong please try again later");
+        print('Error decoding JSON: $e');
+      } finally {
+        setState(() {
+          loading = false;
+        });
+      }
+    } else {
+      print(
+          'Error: ${response.reasonPhrase}, Status Code: ${response.statusCode}');
+    }
+  }
+
+  Future<void> selectSubjectApi() async {
+    LoadingDialog.showLoadingDialog(context);
+    SubjectRepo selectClassRepo = SubjectRepo();
+    try {
+      SubjectDetailsModel data = await selectClassRepo.fetchData();
+
+      if (data.success!) {
+        // Navigator.pop(context);
+        setState(() {
+          _selectSubModelList = data.data!;
+          if (_selectSubModelList.isNotEmpty) {
+            selectedSubValue = _selectSubModelList[0].subjectId.toString();
+          }
+        });
+        selectSemesterApi();
+      } else {
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      Navigator.pop(context);
+      print('Exeption $e');
+    }
+  }
+
+  Future<void> selectSemesterApi() async {
+    //LoadingDialog.showLoadingDialog(context);
+    SelectClassRepo selectClassRepo = SelectClassRepo();
+    try {
+      SemesterSelectModel data = await selectClassRepo.fetchSemData();
+
+      if (data.success!) {
+        // Navigator.pop(context);
+        setState(() {
+          _selectSemesterModelList = data.data!;
+          if (_selectSemesterModelList.isNotEmpty) {
+            selectedSemValue = _selectSemesterModelList[0].sEMECODE;
+          }
+        });
+        selectClassApi();
+      } else {
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      print('Exeption $e');
+      print('$selectedSemValue');
+    }
+  }
+
+  Future<void> selectClassApi() async {
+    //LoadingDialog.showLoadingDialog(context);
+    SelectClassRepo selectClassRepo = SelectClassRepo();
+    try {
+      ClassSelectModel data = await selectClassRepo.fetchData();
+
+      if (data.success!) {
+        Navigator.pop(context);
+        setState(() {
+          _selectClassModelList = data.data!;
+          if (_selectClassModelList.isNotEmpty) {
+            selectedValue = _selectClassModelList[0].cLSCODE;
+          }
+        });
+      } else {
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      Navigator.pop(context);
+      print('Exeption $e');
+      print('$selectedValue');
+    }
+  }
+
+
+  // void _searchApi() async {
+  //   LoadingDialog.showLoadingDialog(context);
+  //
+  //   try {
+  //     StudentAttendanceModel data = await studentAttendanceRepo.fetchData(
+  //       cLS_CODE: selectedValue.toString(),
+  //       sEME_CODE: selectedSemValue.toString(),
+  //     );
+  //     if (data.success!) {
+  //       Navigator.pop(context);
+  //       Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (context) => StudentList(
+  //             cLS_CODE: selectedValue.toString(),
+  //             sEME_CODE: selectedSemValue.toString(),
+  //             attendanceDate: _selectedDate,
+  //             attendanceTime: _selectedClassStartTime.classStartTime.toString(),
+  //             sUBID: selectedSubValue ?? '',
+  //           ),
+  //         ),
+  //       );
+  //     } else {
+  //       Navigator.pop(context);
+  //       ErrorDialouge.showErrorDialogue(context, data.message!);
+  //     }
+  //   } catch (e) {
+  //     Navigator.pop(context);
+  //     ErrorDialouge.showErrorDialogue(context, e.toString());
+  //   }
+  // }
+
+
+
+
+
 
 
 
