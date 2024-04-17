@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:open_file_plus/open_file_plus.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pns_skolar/model/delete_que_model.dart';
 import 'package:pns_skolar/model/questions_history_model.dart';
 import 'package:pns_skolar/widget/success_dialouge.dart';
@@ -116,13 +118,14 @@ class QuestionHistory_State extends State<QuestionHistory> {
                     onTap: () async {
                       print("-->tapped");
 
-                      await OpenFile.open(data[index].questionsDoc);
-                      final url = data[index].questionsDoc.toString();
-                      if (await canLaunch(url)) {
-                        await launch(url);
-                      } else {
-                        ErrorDialouge.showErrorDialogue(context, "Something is Wrong");
-                      }
+                      // await OpenFile.open(data[index].questionsDoc);
+                      // final url = data[index].questionsDoc.toString();
+                      // if (await canLaunch(url)) {
+                      //   await launch(url);
+                      // } else {
+                      //   ErrorDialouge.showErrorDialogue(context, "Something is Wrong");
+                      // }
+                      _openFileFromUrl("${data[index].questionsDoc}");
                     },
                     child: Card(
                       elevation: 4,
@@ -142,7 +145,7 @@ class QuestionHistory_State extends State<QuestionHistory> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "${data[index].subjectName.toString()}",
+                                      "${data[index].subjectName.toString() ?? "-"}",
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w600,
@@ -152,7 +155,7 @@ class QuestionHistory_State extends State<QuestionHistory> {
                                       height: 10,
                                     ),
                                     Text(
-                                      "${data[index].semesterName.toString()} (${data[index].branchName.toString()})",
+                                      "${data[index].semesterName.toString()?? "-"} (${data[index].branchName.toString()?? "-"})",
                                       style: TextStyle(
                                           color: Colors.deepOrange,
                                           fontWeight: FontWeight.w600,
@@ -202,6 +205,27 @@ class QuestionHistory_State extends State<QuestionHistory> {
                 },
               )),
     );
+  }
+
+  Future<void> _openFileFromUrl(pdfUrl) async {
+   try{
+     final url = pdfUrl;
+     final filename = url.substring(url.lastIndexOf("/") + 1);
+     final request = await http.get(Uri.parse(url));
+     final bytes = request.bodyBytes;
+     final tempDir = await getTemporaryDirectory();
+     final file = File('${tempDir.path}/$filename');
+     await file.writeAsBytes(bytes);
+     OpenFile.open(file.path);
+   }catch(e){
+     ErrorDialouge.showErrorDialogue(context, "${e}");
+   }
+  }
+
+  Future<void> _launchUrl(String url) async {
+    if (!await launchUrl(Uri.parse(url))) {
+      ErrorDialouge.showErrorDialogue(context, 'Could not launch $url');
+    }
   }
 
   Future<void> removeItemDialoge(BuildContext context,id) async {

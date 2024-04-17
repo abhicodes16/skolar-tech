@@ -470,44 +470,61 @@ class UploadHomework_State extends State<UploadHomework>{
     SharedPreferences pref = await SharedPreferences.getInstance();
 
     String schoolCode = pref.getString('schoolCode') ?? '';
-
-    // Prepare JSON payload
-    Map<String, dynamic> jsonData = {
-      'branchId': selectedValue.toString(),
-      'semesterId': selectedSemValue.toString(),
-      'subjectId': widget.subCode,
-      'title': questionTitleCnt.text,
-      'assignDtls': assignDtlsCnt.text,
-      'givenDate': givenDateCnt.text,
-      'dueDate': dueDateCnt.text,
+    final params = {
+      'schoolCode': '$schoolCode',
     };
 
-    if (selectedFilePath != null) {
-      jsonData['ass_Doc'] = base64Encode(File(selectedFilePath!).readAsBytesSync());
+    var request = http.MultipartRequest("POST",
+        Uri.parse('${ApiConstant.UPLOAD_HOMEWORK}').replace(queryParameters: params));
+
+    request.headers['token'] = pref.getString('token')!;
+    request.headers['apikey'] = ApiConstant.API_KEY;
+    request.headers['Content-Type'] = 'multipart/form-data';
+
+    request.fields['branchId'] = selectedValue.toString();
+    request.fields['semesterId'] = selectedSemValue.toString();
+    request.fields['subjectId'] = widget.subCode.toString();
+    request.fields['title'] = questionTitleCnt.text;
+    request.fields['assignDtls'] = assignDtlsCnt.text;
+    request.fields['givenDate'] = givenDateCnt.text;
+    request.fields['dueDate'] = dueDateCnt.text;
+
+
+    if (selectedFilePath == null) {
+      selectedFilePath = null;
+    } else {
+      var uploadFile = await http.MultipartFile.fromPath(
+        "ass_Doc",
+        selectedFilePath!,
+        contentType: MediaType('application', 'pdf'),
+      );
+      request.files.add(uploadFile);
     }
 
-    // Send JSON payload using POST request
-    var response = await http.post(
-      Uri.parse('${ApiConstant.UPLOAD_HOMEWORK}?schoolCode=$schoolCode'),
-      headers: {
-        'token': pref.getString('token')!,
-        'apikey': ApiConstant.API_KEY,
-        'Content-Type': 'application/json',
-      },
-      body: json.encode(jsonData),
-    );
+    print('Requested Fields:');
+    print('Fields: ${request.fields}');
+    print('File Details:');
+    request.files.forEach((element) {
+      print("field :::::: ${element.field}");
+      print('File Name: ${element.filename}');
+      print('Content Type: ${element.contentType}');
+      print('Size: ${element.length}');
+    });
 
+    // Send JSON payload using POST request
+    var response = await request.send();
+
+    var responsed = await http.Response.fromStream(response);
     // Listen for response
     try {
       if (response.statusCode == 200) {
-        var decode = json.decode(response.body);
-
+        var decode = json.decode(responsed.body);
+        print("${json.decode(responsed.body)}");
         Navigator.pop(context);
-
         // Set response
         if (decode['success'] != null) {
           if (decode['success']) {
-            SuccessHomeDialog.show(context, 'Homework uploaded successfully.');
+              SuccessHomeDialog.show(context, decode['data'][0]['msg'].toString());
           } else {
             ErrorDialouge.showErrorDialogue(context, decode['message']);
           }
@@ -515,7 +532,7 @@ class UploadHomework_State extends State<UploadHomework>{
       } else {
         // Handle non-200 status code
         print('Error: ${response.statusCode}');
-        print('Response: ${response.body}');
+        print('Response: ${responsed.body}');
         Navigator.pop(context);
       }
     } catch (e) {

@@ -390,10 +390,13 @@ class _UploadPreYearQueState extends State<UploadPreYearQue> {
     SharedPreferences pref = await SharedPreferences.getInstance();
 
     String schoolCode = pref.getString('schoolCode') ?? '';
+    final params = {
+      'schoolCode': '$schoolCode',
+    };
 
     //For file send Api
     var request = http.MultipartRequest("POST",
-        Uri.parse('${ApiConstant.PRE_YR_QUE_UPLOAD}?schoolCode=$schoolCode'));
+        Uri.parse('${ApiConstant.PRE_YR_QUE_UPLOAD}').replace(queryParameters: params));
 
     request.headers['token'] = pref.getString('token')!;
     request.headers['apikey'] = ApiConstant.API_KEY;
@@ -401,7 +404,7 @@ class _UploadPreYearQueState extends State<UploadPreYearQue> {
 
     request.fields['CLS_CODE'] = selectedValue.toString();
     request.fields['SEME_CODE'] = selectedSemValue.toString();
-    request.fields['SBJ_CODE'] = widget.subCode;
+    request.fields['SBJ_CODE'] = widget.subCode.toString();
     request.fields['EM_TTL'] = questionTitleCnt.text;
 
     if (selectedFilePath == null) {
@@ -417,27 +420,45 @@ class _UploadPreYearQueState extends State<UploadPreYearQue> {
 
     var response = await request.send();
 
+
+    print('Requested Fields:');
+    print('Fields: ${request.fields}');
+    print('File Details:');
+    request.files.forEach((element) {
+      print("field :::::: ${element.field}");
+      print('File Name: ${element.filename}');
+      print('Content Type: ${element.contentType}');
+      print('Size: ${element.length}');
+    });
+
+
     print(response.statusCode);
+    var responsed = await http.Response.fromStream(response);
+
 
     //listen for response
     try {
-      response.stream.transform(utf8.decoder).listen(
-        (value) {
-          print(value);
-          var decode = json.decode(value);
+      if (response.statusCode == 200) {
+        var decode = json.decode(responsed.body);
+        print("${json.decode(responsed.body)}");
 
-          Navigator.pop(context);
+        Navigator.pop(context);
 
-          //set response
-          if (decode['success'] != null) {
-            if (decode['success']) {
-              SuccessHomeDialog.show(context, 'Questions upload successfully.');
-            } else {
-              ErrorDialouge.showErrorDialogue(context, decode['message']);
-            }
+        // Set response
+        if (decode['success'] != null) {
+          if (decode['success']) {
+            SuccessHomeDialog.show(context, decode['data'][0]['msg'].toString());
+
+          } else {
+            ErrorDialouge.showErrorDialogue(context, decode['message']);
           }
-        },
-      );
+        }
+      } else {
+        // Handle non-200 status code
+        print('Error: ${response.statusCode}');
+        print('Response: ${responsed.body}');
+        Navigator.pop(context);
+      }
     } catch (e) {
       Navigator.pop(context);
       ErrorDialouge.showErrorDialogue(context, e.toString());

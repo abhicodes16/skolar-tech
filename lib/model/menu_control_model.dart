@@ -46,6 +46,7 @@ class MenuControlData {
   String? pREVIOUSYEARQUESTIONS;
   String? fEEDBACK;
   String? cOURSECOVERED;
+  String? sENDQuery;
 
   MenuControlData(
       {this.mENUID,
@@ -62,7 +63,9 @@ class MenuControlData {
       this.cOURSECOVERED,
       this.pREVIOUSYEARQUESTIONS,
       this.fEEDBACK,
-      this.rESULTPUBLISH});
+      this.rESULTPUBLISH,
+      this.sENDQuery
+      });
 
   MenuControlData.fromJson(Map<String, dynamic> json) {
     mENUID = json['MENU_ID'];
@@ -80,6 +83,7 @@ class MenuControlData {
     pREVIOUSYEARQUESTIONS = json['PREVIOUS_YEAR_QUESTIONS'];
     rESULTPUBLISH = json['RESULT_PUBLISH'];
     fEEDBACK = json['FEEDBACK'];
+    sENDQuery = json['QUERY'];
   }
 
   Map<String, dynamic> toJson() {
@@ -99,6 +103,7 @@ class MenuControlData {
     data['PREVIOUS_YEAR_QUESTIONS'] = this.pREVIOUSYEARQUESTIONS;
     data['RESULT_PUBLISH'] = this.rESULTPUBLISH;
     data['FEEDBACK'] = this.fEEDBACK;
+    data['QUERY'] = this.sENDQuery;
     return data;
   }
 }

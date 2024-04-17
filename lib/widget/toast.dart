@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:realguru_customer/style/theme_constants.dart';
+
+import '../style/theme_constants.dart';
 
 class Utils{
 

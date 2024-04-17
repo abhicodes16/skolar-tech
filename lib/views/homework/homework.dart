@@ -202,11 +202,15 @@ class _HomeWorkPageState extends State<HomeWorkPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               const Text('Subject :  '),
-                              Text(
-                                homeworkModel.data![index].workSubject ?? '',
-                                style: Palette.themeTitleSB,
+                              Expanded(
+                                child: Text(
+                                  homeworkModel.data![index].workSubject ?? '',
+                                  style: Palette.themeTitleSB,
+                                ),
                               ),
                             ],
                           ),

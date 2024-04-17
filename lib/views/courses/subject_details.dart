@@ -136,7 +136,7 @@ class _SubjectDetailsState extends State<SubjectDetails> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            subjectDetailsModel.data![index].subjectName ?? '',
+                            "${subjectDetailsModel.data![index].subjectName.toString() == "null" ? "-" : subjectDetailsModel.data![index].subjectName.toString()}",
                             style: Palette.themeTitle,
                           ),
                           const SizedBox(height: 4),

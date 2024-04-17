@@ -21,7 +21,11 @@ import 'package:pns_skolar/views/pre_year_que/select_class_sem.dart';
 import 'package:pns_skolar/views/pre_year_que/upload_que_history.dart';
 import 'package:pns_skolar/views/profile/TeacherProfile.dart';
 import 'package:pns_skolar/views/profile/profile.dart';
+import 'package:pns_skolar/views/query/student_queries.dart';
+import 'package:pns_skolar/views/query/view_queries.dart';
 import 'package:pns_skolar/views/school_code_screen.dart';
+import 'package:pns_skolar/views/staff/staff_details.dart';
+import 'package:pns_skolar/views/staff/staff_list.dart';
 import 'package:pns_skolar/views/test/test_details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -815,6 +819,120 @@ class _BodyState extends State<Body> {
                         ),
                         Text(
                           'Feedback',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black.withOpacity(0.7),
+                          ),
+                        )
+                      ],
+                    ),
+                  if (isTeacher! )
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Get.to(()=>ViewQueries());
+                          },
+                          child: Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                              color: Colors.red.shade600,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.question_answer_sharp,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'Query',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black.withOpacity(0.7),
+                          ),
+                        )
+                      ],
+                    ),
+
+                  if (isTeacher! )
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Get.to(()=>StaffList());
+                          },
+                          child: Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                              color: Colors.blue.shade900,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.group,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'Staff',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black.withOpacity(0.7),
+                          ),
+                        )
+                      ],
+                    ),
+
+                  if (!isTeacher! )
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Get.to(()=>StudentQueries(),
+                            arguments: {
+                              'branchID' : sTDBRANCH
+                            }
+                            );
+                          },
+                          child: Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                              color: Colors.green.shade600,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.question_answer_sharp,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'Query',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,

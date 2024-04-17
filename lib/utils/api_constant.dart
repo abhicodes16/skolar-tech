@@ -108,7 +108,7 @@ class ApiConstant {
 
 
 
-  static const String UPLOAD_HOMEWORK = '$API_URL/postPreviousYearQuestionsDeleteById';
+  static const String UPLOAD_HOMEWORK = '$API_URL/postStudentHomeworkByTeacher';
 
 
   static const String GET_EXAMTYPE = '$API_URL/getExamTypeName';
@@ -118,6 +118,15 @@ class ApiConstant {
 
 
   static const String ACADEMIC_CALENDAR = '$API_URL/postAcademicCalendar';
+
+  //Queries
+  static const String GET_QUERIES_TEACHER = '$API_URL/getStudentSendQueryBYFaculty';
+  static const String POST_REPLY_TEACHER = '$API_URL/postReplyForStudentSendQuery';
+  static const String GET_REPLY_FROM_TEACHER = '$API_URL/getReplyDtlsForStudentSendQuery';
+  static const String POST_QUERY = '$API_URL/postStudentSendQuery';
+
+  //Staff
+  static const String GET_STAFF_DATA = '$API_URL/getStaffMembersDetails';
 
 
 

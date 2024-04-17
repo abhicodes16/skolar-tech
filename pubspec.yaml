@@ -51,6 +51,8 @@ dependencies:
   open_file_plus: ^3.4.0
   file_picker: ^6.1.1
   flutter_rating_bar: ^4.0.1
+  fluttertoast: ^8.0.9
+  animated_custom_dropdown: ^3.0.0
 
 dev_dependencies:
   flutter_test:

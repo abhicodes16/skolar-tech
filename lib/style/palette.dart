@@ -28,6 +28,7 @@ class Palette {
       end: Alignment.centerRight,
       colors: [kThemeColor, kDarkThemeColor],
     ),
+
   );
 
   static BoxDecoration pageGradient = const BoxDecoration(
