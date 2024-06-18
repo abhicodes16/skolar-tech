@@ -15,6 +15,7 @@ import 'package:pns_skolar/views/holiday/holidays.dart';
 import 'package:pns_skolar/views/leave/applyForleave.dart';
 import 'package:pns_skolar/views/leave/leaveStatus.dart';
 import 'package:pns_skolar/views/leave/leaveSummery.dart';
+import 'package:pns_skolar/views/library/library_management.dart';
 import 'package:pns_skolar/views/news/news.dart';
 import 'package:pns_skolar/views/notice/notice.dart';
 import 'package:pns_skolar/views/pre_year_que/select_class_sem.dart';
@@ -933,6 +934,43 @@ class _BodyState extends State<Body> {
                         ),
                         Text(
                           'Query',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black.withOpacity(0.7),
+                          ),
+                        )
+                      ],
+                    ),
+
+                  if (!isTeacher! )
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Get.to(()=>LibraryManagement());
+                          },
+                          child: Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                              color: Colors.pink.shade600,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.question_answer_sharp,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'Library',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,

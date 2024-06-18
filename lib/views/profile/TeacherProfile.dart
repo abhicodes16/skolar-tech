@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:pns_skolar/views/profile/update_profile.dart';
 
 import '../../model/teacher_profile_model.dart';
 import '../../repo/profile/teacher_profile_repo.dart';
@@ -41,6 +43,9 @@ class _TeacherProfileState extends State<TeacherProfile> {
     super.initState();
   }
 
+  var width = Get.width;
+  var heigth = Get.height;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,16 +61,60 @@ class _TeacherProfileState extends State<TeacherProfile> {
       body: isTeacher!
           ? TeacherProfile()
           : !isLoading
-              ? SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _tchDetailsWidget(),
-                      _tchProfileDetailsWidget(),
-                      const SizedBox(
-                        height: 15,
+              ? Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            _tchDetailsWidget(),
+                            _tchProfileDetailsWidget(),
+                            SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Get.to(() => UpdateProfile(), arguments: {
+                          "eMPNAME": "${eMPNAME}",
+                          "eMPPHTURL": "${eMPPHTURL}",
+                          "eMPDEPTCODE": "${eMPDEPTCODE}",
+                          "eMPMAILID": "${eMPMAILID}",
+                          "eMPMOB": "${eMPMOB}",
+                          "eMPDOB": "${eMPDOB}",
+                          "eMPDOJ": "${eMPDOJ}",
+                          "eMPGNDR": "${eMPGNDR}",
+                          "eMPCODE": "${eMPCODE}",
+                          "eMPADHNO": "${eMPADHNO}",
+                          "eMPPANNO": "${eMPPANNO}",
+                          "eMPFTHNM": "${eMPFTHNM}",
+                          "eMPADRSPRMN": "${eMPADRSPRMN}",
+                          "eMPADRSPRSN": "${eMPADRSPRSN}",
+                          "eMPDESGCODE": "${eMPDESGCODE}",
+                          "eMPTYPCODE": "${eMPTYPCODE}",
+                        });
+                      },
+                      child: Container(
+                        width: width,
+                        height: 50,
+                        margin: EdgeInsets.only(right: 15, left: 15),
+                        decoration: BoxDecoration(
+                            color: kThemeColor,
+                            borderRadius: BorderRadius.circular(8)),
+                        child: Center(
+                            child: Text(
+                          "Update Profile",
+                          style: Palette.whiteBtnTxt,
+                        )),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
                 )
               : const Center(
                   child: CircularProgressIndicator(),
@@ -190,7 +239,7 @@ class _TeacherProfileState extends State<TeacherProfile> {
     return Container(
       margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
       padding: const EdgeInsets.fromLTRB(13, 12, 9, 5),
-      width: 334,
+      width: Get.width,
       decoration: BoxDecoration(
         color: const Color(0xffffffff),
         borderRadius: BorderRadius.circular(10),

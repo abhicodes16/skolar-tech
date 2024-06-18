@@ -128,6 +128,15 @@ class ApiConstant {
   //Staff
   static const String GET_STAFF_DATA = '$API_URL/getStaffMembersDetails';
 
+  static const String GET_DESIGNATIONS = '$API_URL/getDesignationNames';
+  static const String GET_QUALIFICATIONS = '$API_URL/getQualificationNames';
+  static const String GET_DEPARTMENTS = '$API_URL/getDepartmentNames';
+  static const String UPDATE_PRPOFILE = '$API_URL/postTeacherProfileUpdate';
+
+  //LIBRARY
+  static const String GET_BOOKS = '$API_URL/postBookName';
+  static const String BOOK_LIST = '$API_URL/postAvailableBookDetails';
+
 
 
 

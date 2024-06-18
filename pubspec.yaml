@@ -53,6 +53,9 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   fluttertoast: ^8.0.9
   animated_custom_dropdown: ^3.0.0
+  image_picker: ^1.0.5
+  image_cropper: ^5.0.0
+
 
 dev_dependencies:
   flutter_test:
