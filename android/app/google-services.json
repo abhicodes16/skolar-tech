@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "426299187971",
+    "project_id": "skolar-tech",
+    "storage_bucket": "skolar-tech.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:426299187971:android:3efbcc9c938d3a2f6bbf36",
+        "android_client_info": {
+          "package_name": "com.ntier.skolartech"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz_drtOl6E2_4yYbSJ7LsqUK90jgLxD00"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

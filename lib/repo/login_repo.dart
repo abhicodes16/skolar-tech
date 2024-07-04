@@ -1,3 +1,5 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import '../model/login_model.dart';
 import '../model/teacher-login_model.dart';
 import '../utils/api_constant.dart';
@@ -14,6 +16,8 @@ class LoginRepo {
     String? iPAddress,
     required String? schoolCode,
   }) async {
+    String fcmToken = await FirebaseMessaging.instance.getToken() ?? '';
+
     final response = await _provider.httpMethod(
       method: 'POST',
       url: '${ApiConstant.LOGIN}$schoolCode',
@@ -21,7 +25,7 @@ class LoginRepo {
         'UserName': userName,
         'Password': password,
         'DeviceId': deviceId,
-        'DeviceToken': deviceToken,
+        'DeviceToken': fcmToken,
         'IPAddress': iPAddress,
       },
     );
@@ -38,6 +42,8 @@ class LoginRepo {
     String? iPAddress,
     required String? schoolCode,
   }) async {
+    String fcmToken = await FirebaseMessaging.instance.getToken() ?? '';
+
     final response = await _provider.httpMethod(
       method: 'POST',
       url: '${ApiConstant.TEACHER_LOGIN}$schoolCode',
@@ -45,7 +51,7 @@ class LoginRepo {
         'UserName': userName,
         'Password': password,
         'DeviceId': deviceId,
-        'DeviceToken': deviceToken,
+        'DeviceToken': fcmToken,
         'IPAddress': iPAddress,
       },
     );

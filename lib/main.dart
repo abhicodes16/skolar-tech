@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,16 @@ import 'widget/navigation_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: 'AIzaSyDz_drtOl6E2_4yYbSJ7LsqUK90jgLxD00',
+      appId: '1:426299187971:android:3efbcc9c938d3a2f6bbf36',
+      messagingSenderId: '426299187971',
+      projectId: 'skolar-tech',
+      storageBucket: 'skolar-tech.appspot.com',
+    ),
+  );
+
   HttpOverrides.global = MyHttpOverrides();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const MyApp());
@@ -45,8 +56,6 @@ class MyApp extends StatelessWidget {
 
 class MyHttpOverrides extends HttpOverrides {
   HttpClient httpClient(SecurityContext context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
