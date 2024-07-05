@@ -30,10 +30,9 @@ class StaffList_State extends State<StaffList> {
     getStaffDetails();
   }
 
-  String ? _selectedDept ;
+  String? _selectedDept;
 
   TextEditingController _searchController = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -48,68 +47,52 @@ class StaffList_State extends State<StaffList> {
         ),
         body: loading
             ? Center(
-            child: SizedBox(
-              height: 30,
-              width: 30,
-              child: CircularProgressIndicator(),
-            ))
+                child: SizedBox(
+                height: 30,
+                width: 30,
+                child: CircularProgressIndicator(),
+              ))
             : data.isEmpty
-            ? Center(
-          child: Text("No Data Available..!"),
-        )
-            : Column(
-          children: [
-
-
-            Padding(
-              padding:  EdgeInsets.only(
-                right: width*0.02,
-                left: width*0.02,
-                top: height*0.01
-              ),
-              child: TextFormField(
-                controller: _searchController,
-                keyboardType: TextInputType.text,
-                cursorColor: Colors.black,
-                onChanged: (value) {
-                  setState(() {});
-                },
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.grey.shade200,
-                    hintText: "Search By Username",
-                    hintStyle: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
-                    suffixIcon: Icon(Icons.search, color: Colors.grey),
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: Colors.grey, width: 1.5)),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: Colors.grey, width: 1.5)),
-                    disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: Colors.grey, width: 1.5)),
-                    contentPadding:
-                    EdgeInsets.symmetric(vertical: 10, horizontal: 15)),
-              ),
-            ),
-
-            _dropDown(),
-
-            _staffList(),
-          ],
-        ));
+                ? Center(
+                    child: Text("No Data Available..!"),
+                  )
+                : Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(right: width * 0.02, left: width * 0.02, top: height * 0.01),
+                        child: TextFormField(
+                          controller: _searchController,
+                          keyboardType: TextInputType.text,
+                          cursorColor: Colors.black,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.grey.shade200,
+                              hintText: "Search By Username",
+                              hintStyle: TextStyle(color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w500),
+                              suffixIcon: Icon(Icons.search, color: Colors.grey),
+                              enabledBorder:
+                                  OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: Colors.grey, width: 1.5)),
+                              focusedBorder:
+                                  OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: Colors.grey, width: 1.5)),
+                              disabledBorder:
+                                  OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: Colors.grey, width: 1.5)),
+                              contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15)),
+                        ),
+                      ),
+                      _dropDown(),
+                      _staffList(),
+                    ],
+                  ));
   }
 
-  Widget _staffList(){
-
-    List<Data> filteredData ;
-    if(_selectedDept != null){
+  Widget _staffList() {
+    List<Data> filteredData;
+    if (_selectedDept != null) {
       filteredData = data.where((item) => item.eMPDEPTNAME == _selectedDept.toString()).toList();
-    }else{
+    } else {
       filteredData = data.toList();
     }
 
@@ -118,292 +101,248 @@ class StaffList_State extends State<StaffList> {
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),
         padding: EdgeInsets.only(
-          right: width*0.02,
-          left: width*0.02,
+          right: width * 0.02,
+          left: width * 0.02,
         ),
         itemCount: filteredData.length,
         itemBuilder: (context, index) {
-
           var dataIndex = filteredData[index];
 
-          if(_searchController.text.isEmpty){
+          if (_searchController.text.isEmpty) {
             return InkWell(
               onTap: () {
-                Get.to(()=>StaffDetails(),
-                    arguments: {
-                      'EmpName' : '${dataIndex.eMPNAME ?? "-"}',
-                      'EmpId' : '${dataIndex.empIdNo ?? "-"}',
-                      'EmpCode' : '${dataIndex.eMPCODE ?? "-"}',
-                      'EMP_DOB' : '${dataIndex.eMPDOB ?? "-"}',
-                      'EMP_MOB' : '${dataIndex.eMPMOB ?? "-"}',
-                      'EMP_Mail' : '${dataIndex.eMPMAILID ?? "-"}',
-                      'EMP_GNDR' : '${dataIndex.eMPGNDR ?? "-"}',
-                      'EMP_DOJ' : '${dataIndex.eMPDOJ ?? "-"}',
-                      'EMP_DESG_NAME' : '${dataIndex.eMPDESGNAME ?? "-"}',
-                      'EMP_QUALIFICATION' : '${dataIndex.eMPQUALIFICATION ?? "-"}',
-                      'EMP_ADH_NO' : '${dataIndex.eMPADHNO ?? "-"}',
-                      'EMP_PAN_NO' : '${dataIndex.eMPPANNO ?? "-"}',
-                      'EMP_TYP_CODE' : '${dataIndex.eMPTYPCODE ?? "-"}',
-                      'photo' : '${dataIndex.eMPPHTURL ?? "-"}',
-                      'EMP_DEPT_NAME' : '${dataIndex.eMPDEPTNAME ?? "-"}',
-                      'EMP_ADRS_PRSN' : '${dataIndex.eMPADRSPRSN ?? "-"}',
-                      'EMP_ADRS_PRMN' : '${dataIndex.eMPADRSPRMN ?? "-"}',
-                    }
-                );
+                Get.to(() => StaffDetails(), arguments: {
+                  'EmpName': '${dataIndex.eMPNAME ?? "-"}',
+                  'EmpId': '${dataIndex.empIdNo ?? "-"}',
+                  'EmpCode': '${dataIndex.eMPCODE ?? "-"}',
+                  'EMP_DOB': '${dataIndex.eMPDOB ?? "-"}',
+                  'EMP_MOB': '${dataIndex.eMPMOB ?? "-"}',
+                  'EMP_Mail': '${dataIndex.eMPMAILID ?? "-"}',
+                  'EMP_GNDR': '${dataIndex.eMPGNDR ?? "-"}',
+                  'EMP_DOJ': '${dataIndex.eMPDOJ ?? "-"}',
+                  'EMP_DESG_NAME': '${dataIndex.eMPDESGNAME ?? "-"}',
+                  'EMP_QUALIFICATION': '${dataIndex.eMPQUALIFICATION ?? "-"}',
+                  'EMP_ADH_NO': '${dataIndex.eMPADHNO ?? "-"}',
+                  'EMP_PAN_NO': '${dataIndex.eMPPANNO ?? "-"}',
+                  'EMP_TYP_CODE': '${dataIndex.eMPTYPCODE ?? "-"}',
+                  'photo': '${dataIndex.eMPPHTURL ?? "-"}',
+                  'EMP_DEPT_NAME': '${dataIndex.eMPDEPTNAME ?? "-"}',
+                  'EMP_ADRS_PRSN': '${dataIndex.eMPADRSPRSN ?? "-"}',
+                  'EMP_ADRS_PRMN': '${dataIndex.eMPADRSPRMN ?? "-"}',
+                });
               },
               child: Card(
                 elevation: 4,
                 margin: EdgeInsets.only(bottom: 20),
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                      right: 10,left: 10,
-                      top: 8,bottom: 8
-                  ),
+                  padding: const EdgeInsets.only(right: 10, left: 10, top: 8, bottom: 8),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            height: 65,width: 65,
+                            height: 65,
+                            width: 65,
                             decoration: BoxDecoration(
-                                border: Border.all(color: kThemeDarkColor,width: 1.5),
+                                border: Border.all(color: kThemeDarkColor, width: 1.5),
                                 shape: BoxShape.circle,
-                                image: dataIndex.eMPPHTURL.toString() == "null"  || dataIndex.eMPPHTURL.toString().isEmpty ? DecorationImage(image: AssetImage("assets/img/as.png")) :  DecorationImage(image: NetworkImage(dataIndex.eMPPHTURL.toString() ?? "-"))
-                            ),
+                                image: dataIndex.eMPPHTURL.toString() == "null" || dataIndex.eMPPHTURL.toString().isEmpty
+                                    ? DecorationImage(image: AssetImage("assets/img/as.png"))
+                                    : DecorationImage(image: NetworkImage(dataIndex.eMPPHTURL.toString() ?? "-"))),
                           ),
-
-                          SizedBox(width: 20,),
-
+                          SizedBox(
+                            width: 20,
+                          ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(top: 5,bottom: 5),
+                              padding: const EdgeInsets.only(top: 5, bottom: 5),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Expanded(
-                                        child: Text("${dataIndex.eMPNAME.toString() ?? "-"}",
-                                          style: TextStyle(
-                                              color: kThemeDarkColor,
-                                              fontSize: 14,fontWeight: FontWeight.w600
-                                          ),
+                                        child: Text(
+                                          "${dataIndex.eMPNAME.toString() ?? "-"}",
+                                          style: TextStyle(color: kThemeDarkColor, fontSize: 14, fontWeight: FontWeight.w600),
                                         ),
                                       ),
-
-
                                       Container(
                                         color: kThemeColor,
                                         child: Padding(
-                                          padding:  EdgeInsets.only(
-                                              left: 5,right: 5,bottom: 3,top: 3
-                                          ),
+                                          padding: EdgeInsets.only(left: 5, right: 5, bottom: 3, top: 3),
                                           child: Text("${dataIndex.eMPGNDR.toString() ?? "-"}",
-                                              style:  TextStyle(
+                                              style: TextStyle(
                                                 fontFamily: kThemeFont,
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 12.0,
                                                 color: Colors.white,
-                                              )
-                                          ),
+                                              )),
                                         ),
                                       )
-
                                     ],
                                   ),
-
-                                  SizedBox(height: 2,),
-
-                                  Text("${dataIndex.empIdNo.toString() ?? "-"}",
-                                    style: TextStyle(
-                                        color: kThemeDarkColor.withOpacity(0.6),
-                                        fontSize: 12.5,fontWeight: FontWeight.w600
-                                    ),
+                                  SizedBox(
+                                    height: 2,
                                   ),
-
-                                  SizedBox(height: 2,),
-
-                                  Text("${dataIndex.eMPMAILID.toString() ?? "-"}",
-                                    style: TextStyle(
-                                        color: kThemeDarkColor.withOpacity(0.6),
-                                        fontSize: 12,fontWeight: FontWeight.w600
-                                    ),
+                                  Text(
+                                    "${dataIndex.empIdNo.toString() ?? "-"}",
+                                    style: TextStyle(color: kThemeDarkColor.withOpacity(0.6), fontSize: 12.5, fontWeight: FontWeight.w600),
+                                  ),
+                                  SizedBox(
+                                    height: 2,
+                                  ),
+                                  Text(
+                                    "${dataIndex.eMPMAILID.toString() ?? "-"}",
+                                    style: TextStyle(color: kThemeDarkColor.withOpacity(0.6), fontSize: 12, fontWeight: FontWeight.w600),
                                   )
-
                                 ],
                               ),
                             ),
                           )
-
                         ],
                       ),
-
                     ],
                   ),
                 ),
               ),
             );
-          }else if(dataIndex.eMPNAME.toString().toLowerCase().contains(_searchController.text.toLowerCase())){
+          } else if (dataIndex.eMPNAME.toString().toLowerCase().contains(_searchController.text.toLowerCase())) {
             return InkWell(
               onTap: () {
-                Get.to(()=>StaffDetails(),
-                    arguments: {
-                      'EmpName' : '${dataIndex.eMPNAME ?? "-"}',
-                      'EmpId' : '${dataIndex.empIdNo ?? "-"}',
-                      'EmpCode' : '${dataIndex.eMPCODE ?? "-"}',
-                      'EMP_DOB' : '${dataIndex.eMPDOB ?? "-"}',
-                      'EMP_MOB' : '${dataIndex.eMPMOB ?? "-"}',
-                      'EMP_Mail' : '${dataIndex.eMPMAILID ?? "-"}',
-                      'EMP_GNDR' : '${dataIndex.eMPGNDR ?? "-"}',
-                      'EMP_DOJ' : '${dataIndex.eMPDOJ ?? "-"}',
-                      'EMP_DESG_NAME' : '${dataIndex.eMPDESGNAME ?? "-"}',
-                      'EMP_QUALIFICATION' : '${dataIndex.eMPQUALIFICATION ?? "-"}',
-                      'EMP_ADH_NO' : '${dataIndex.eMPADHNO ?? "-"}',
-                      'EMP_PAN_NO' : '${dataIndex.eMPPANNO ?? "-"}',
-                      'EMP_TYP_CODE' : '${dataIndex.eMPTYPCODE ?? "-"}',
-                      'photo' : '${dataIndex.eMPPHTURL ?? "-"}',
-                      'EMP_DEPT_NAME' : '${dataIndex.eMPDEPTNAME ?? "-"}',
-                      'EMP_ADRS_PRSN' : '${dataIndex.eMPADRSPRSN ?? "-"}',
-                      'EMP_ADRS_PRMN' : '${dataIndex.eMPADRSPRMN ?? "-"}',
-                    }
-                );
+                Get.to(() => StaffDetails(), arguments: {
+                  'EmpName': '${dataIndex.eMPNAME ?? "-"}',
+                  'EmpId': '${dataIndex.empIdNo ?? "-"}',
+                  'EmpCode': '${dataIndex.eMPCODE ?? "-"}',
+                  'EMP_DOB': '${dataIndex.eMPDOB ?? "-"}',
+                  'EMP_MOB': '${dataIndex.eMPMOB ?? "-"}',
+                  'EMP_Mail': '${dataIndex.eMPMAILID ?? "-"}',
+                  'EMP_GNDR': '${dataIndex.eMPGNDR ?? "-"}',
+                  'EMP_DOJ': '${dataIndex.eMPDOJ ?? "-"}',
+                  'EMP_DESG_NAME': '${dataIndex.eMPDESGNAME ?? "-"}',
+                  'EMP_QUALIFICATION': '${dataIndex.eMPQUALIFICATION ?? "-"}',
+                  'EMP_ADH_NO': '${dataIndex.eMPADHNO ?? "-"}',
+                  'EMP_PAN_NO': '${dataIndex.eMPPANNO ?? "-"}',
+                  'EMP_TYP_CODE': '${dataIndex.eMPTYPCODE ?? "-"}',
+                  'photo': '${dataIndex.eMPPHTURL ?? "-"}',
+                  'EMP_DEPT_NAME': '${dataIndex.eMPDEPTNAME ?? "-"}',
+                  'EMP_ADRS_PRSN': '${dataIndex.eMPADRSPRSN ?? "-"}',
+                  'EMP_ADRS_PRMN': '${dataIndex.eMPADRSPRMN ?? "-"}',
+                });
               },
               child: Card(
                 elevation: 4,
                 margin: EdgeInsets.only(bottom: 20),
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                      right: 10,left: 10,
-                      top: 8,bottom: 8
-                  ),
+                  padding: const EdgeInsets.only(right: 10, left: 10, top: 8, bottom: 8),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            height: 65,width: 65,
+                            height: 65,
+                            width: 65,
                             decoration: BoxDecoration(
-                                border: Border.all(color: kThemeDarkColor,width: 1.5),
+                                border: Border.all(color: kThemeDarkColor, width: 1.5),
                                 shape: BoxShape.circle,
-                                image: dataIndex.eMPPHTURL.toString() == "null"  || dataIndex.eMPPHTURL.toString().isEmpty ? DecorationImage(image: AssetImage("assets/img/as.png")) :  DecorationImage(image: NetworkImage(dataIndex.eMPPHTURL.toString() ?? "-"))
-                            ),
+                                image: dataIndex.eMPPHTURL.toString() == "null" || dataIndex.eMPPHTURL.toString().isEmpty
+                                    ? DecorationImage(image: AssetImage("assets/img/as.png"))
+                                    : DecorationImage(image: NetworkImage(dataIndex.eMPPHTURL.toString() ?? "-"))),
                           ),
-
-                          SizedBox(width: 20,),
-
+                          SizedBox(
+                            width: 20,
+                          ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(top: 5,bottom: 5),
+                              padding: const EdgeInsets.only(top: 5, bottom: 5),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Expanded(
-                                        child: Text("${dataIndex.eMPNAME.toString() ?? "-"}",
-                                          style: TextStyle(
-                                              color: kThemeDarkColor,
-                                              fontSize: 14,fontWeight: FontWeight.w600
-                                          ),
+                                        child: Text(
+                                          "${dataIndex.eMPNAME.toString() ?? "-"}",
+                                          style: TextStyle(color: kThemeDarkColor, fontSize: 14, fontWeight: FontWeight.w600),
                                         ),
                                       ),
-
-
                                       Container(
                                         color: kThemeColor,
                                         child: Padding(
-                                          padding:  EdgeInsets.only(
-                                              left: 5,right: 5,bottom: 3,top: 3
-                                          ),
+                                          padding: EdgeInsets.only(left: 5, right: 5, bottom: 3, top: 3),
                                           child: Text("${dataIndex.eMPGNDR.toString() ?? "-"}",
-                                              style:  TextStyle(
+                                              style: TextStyle(
                                                 fontFamily: kThemeFont,
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 12.0,
                                                 color: Colors.white,
-                                              )
-                                          ),
+                                              )),
                                         ),
                                       )
-
                                     ],
                                   ),
-
-                                  SizedBox(height: 2,),
-
-                                  Text("${dataIndex.empIdNo.toString() ?? "-"}",
-                                    style: TextStyle(
-                                        color: kThemeDarkColor.withOpacity(0.6),
-                                        fontSize: 12.5,fontWeight: FontWeight.w600
-                                    ),
+                                  SizedBox(
+                                    height: 2,
                                   ),
-
-                                  SizedBox(height: 2,),
-
-                                  Text("${dataIndex.eMPMAILID.toString() ?? "-"}",
-                                    style: TextStyle(
-                                        color: kThemeDarkColor.withOpacity(0.6),
-                                        fontSize: 12,fontWeight: FontWeight.w600
-                                    ),
+                                  Text(
+                                    "${dataIndex.empIdNo.toString() ?? "-"}",
+                                    style: TextStyle(color: kThemeDarkColor.withOpacity(0.6), fontSize: 12.5, fontWeight: FontWeight.w600),
+                                  ),
+                                  SizedBox(
+                                    height: 2,
+                                  ),
+                                  Text(
+                                    "${dataIndex.eMPMAILID.toString() ?? "-"}",
+                                    style: TextStyle(color: kThemeDarkColor.withOpacity(0.6), fontSize: 12, fontWeight: FontWeight.w600),
                                   )
-
                                 ],
                               ),
                             ),
                           )
-
                         ],
                       ),
-
                     ],
                   ),
                 ),
               ),
             );
-          }else{
+          } else {
             return SizedBox();
           }
-
         },
       ),
     );
   }
 
-
-
-  Widget _dropDown(){
-
+  Widget _dropDown() {
     Set<String> departments = Set<String>.from(data.map((item) => item.eMPDEPTNAME));
+    
     return Card(
       elevation: 4,
       margin: EdgeInsets.only(
-        right: width*0.02,
-        left: width*0.02,
-        top: height*0.01,
-        bottom: height*0.01,
+        right: width * 0.02,
+        left: width * 0.02,
+        top: height * 0.01,
+        bottom: height * 0.01,
       ),
       child: Padding(
-        padding:  EdgeInsets.only(
-          right: width*0.04,
-          left: width*0.04,
+        padding: EdgeInsets.only(
+          right: width * 0.04,
+          left: width * 0.04,
         ),
         child: DropdownButton(
           isExpanded: true,
@@ -415,7 +354,7 @@ class StaffList_State extends State<StaffList> {
               _selectedDept = newValue.toString();
             });
           },
-          items:  departments.map<DropdownMenuItem<String>>((String value) {
+          items: departments.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value),
@@ -447,34 +386,25 @@ class StaffList_State extends State<StaffList> {
         'schoolCode': '$schoolCode',
       };
 
-      final uri = Uri.parse(ApiConstant.GET_STAFF_DATA)
-          .replace(queryParameters: params);
+      final uri = Uri.parse(ApiConstant.GET_STAFF_DATA).replace(queryParameters: params);
 
       final response = await http.get(
         uri,
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': ApiConstant.API_KEY,
-          'token': token
-        },
+        headers: {'Content-Type': 'application/json', 'apikey': ApiConstant.API_KEY, 'token': token},
       );
 
       if (response.statusCode == 200) {
-        final StaffDetailsModel questionHistory =
-        StaffDetailsModel.fromJson(json.decode(response.body));
+        final StaffDetailsModel questionHistory = StaffDetailsModel.fromJson(json.decode(response.body));
 
         setState(() {
           data = questionHistory.data ?? [];
         });
       } else {
-        ErrorDialouge.showErrorDialogue(
-            context, "Something is Wrong please try again later");
-        print(
-            'Error: ${response.reasonPhrase}, Status Code: ${response.statusCode}');
+        ErrorDialouge.showErrorDialogue(context, "Something is Wrong please try again later");
+        print('Error: ${response.reasonPhrase}, Status Code: ${response.statusCode}');
       }
     } catch (e) {
-      ErrorDialouge.showErrorDialogue(
-          context, "Something is Wrong please try again later");
+      ErrorDialouge.showErrorDialogue(context, "Something is Wrong please try again later");
       print('Error decoding JSON: $e');
     } finally {
       setState(() {

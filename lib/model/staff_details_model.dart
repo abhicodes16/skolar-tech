@@ -51,22 +51,22 @@ class Data {
 
   Data(
       {this.eMPCODE,
-        this.eMPNAME,
-        this.eMPDOB,
-        this.empIdNo,
-        this.eMPMOB,
-        this.eMPMAILID,
-        this.eMPGNDR,
-        this.eMPDOJ,
-        this.eMPDESGNAME,
-        this.eMPQUALIFICATION,
-        this.eMPADHNO,
-        this.eMPPANNO,
-        this.eMPTYPCODE,
-        this.eMPPHTURL,
-        this.eMPDEPTNAME,
-        this.eMPADRSPRSN,
-        this.eMPADRSPRMN});
+      this.eMPNAME,
+      this.eMPDOB,
+      this.empIdNo,
+      this.eMPMOB,
+      this.eMPMAILID,
+      this.eMPGNDR,
+      this.eMPDOJ,
+      this.eMPDESGNAME,
+      this.eMPQUALIFICATION,
+      this.eMPADHNO,
+      this.eMPPANNO,
+      this.eMPTYPCODE,
+      this.eMPPHTURL,
+      this.eMPDEPTNAME,
+      this.eMPADRSPRSN,
+      this.eMPADRSPRMN});
 
   Data.fromJson(Map<String, dynamic> json) {
     eMPCODE = json['EMP_CODE'];

@@ -10,18 +10,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../style/palette.dart';
 import '../../utils/api_constant.dart';
+import '../../widget/date_formatter.dart';
 import '../../widget/error_dialouge.dart';
 
-class ViewExamSchedule extends StatefulWidget{
+class ViewExamSchedule extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return ViewExamSchedule_State();
   }
 }
 
-class ViewExamSchedule_State extends State<ViewExamSchedule>{
-
-
+class ViewExamSchedule_State extends State<ViewExamSchedule> {
   var declarationId;
 
   var schoolCode;
@@ -73,8 +72,7 @@ class ViewExamSchedule_State extends State<ViewExamSchedule>{
           ExamScheduleData = ExamSchedules.data ?? [];
         });
       } catch (e) {
-        ErrorDialouge.showErrorDialogue(
-            context, "Something is wrong, please try again later");
+        ErrorDialouge.showErrorDialogue(context, "Something is wrong, please try again later");
         print('Error decoding JSON: $e');
       } finally {
         setState(() {
@@ -82,14 +80,10 @@ class ViewExamSchedule_State extends State<ViewExamSchedule>{
         });
       }
     } else {
-      ErrorDialouge.showErrorDialogue(
-          context, "Something is wrong, please try again later");
+      ErrorDialouge.showErrorDialogue(context, "Something is wrong, please try again later");
       print('Error: ${response.reasonPhrase}, Status Code: ${response.statusCode}');
     }
   }
-
-
-
 
   var width = Get.width;
   var height = Get.height;
@@ -115,122 +109,123 @@ class ViewExamSchedule_State extends State<ViewExamSchedule>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('View Exam Schedule', style: Palette.appbarTitle),
-        flexibleSpace: Container(decoration: Palette.appbarGradient),
-        elevation: 0,
-      ),
-      body:
-      loading ?
-      Center(child: SizedBox(height: 40,width: 40,child: CircularProgressIndicator()),)
-          :
-          _scheduleExamList()
-    );
+        appBar: AppBar(
+          title: Text('View Exam Schedule', style: Palette.appbarTitle),
+          flexibleSpace: Container(decoration: Palette.appbarGradient),
+          elevation: 0,
+        ),
+        body: loading
+            ? Center(
+                child: SizedBox(height: 40, width: 40, child: CircularProgressIndicator()),
+              )
+            : _scheduleExamList());
   }
 
-  Widget _scheduleExamList(){
-    return  ListView.builder(
+  Widget _scheduleExamList() {
+    return ListView.builder(
       itemCount: ExamScheduleData.length,
-      itemBuilder:  (context, index) {
+      itemBuilder: (context, index) {
         final dataIndex = ExamScheduleData[index];
 
+        var fomattedDate = dataIndex.dateOfExam != null ? DateFormatterWD.convertDateFormat(dataIndex.dateOfExam!) : '';
+
         return Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
           child: Card(
-            elevation: 4,
+            elevation: 6,
+            shape: Palette.cardShape,
             shadowColor: kThemeColor,
-            child: Container(
-              width: width*0.9,
+            child: SizedBox(
+              width: width * 0.9,
               child: Padding(
-                padding: const EdgeInsets.only(
-                    top: 10,bottom: 10,right: 15,left: 15
-                ),
+                padding: const EdgeInsets.only(top: 10, bottom: 10, right: 15, left: 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     Row(
                       children: [
                         Expanded(
-                          child: Text(dataIndex.subjectName ?? "",
-                            style: TextStyle(
-                                color: kThemeDarkColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600
-                            ),
+                          child: Text(
+                            dataIndex.subjectName ?? "",
+                            style: const TextStyle(color: kThemeDarkColor, fontSize: 16, fontWeight: FontWeight.w600),
                           ),
                         ),
-
-                        CircleAvatar(
-                            radius: 15,
-                            child: Icon(CupertinoIcons.pen,color: Colors.white,size: 17,)
-                        )
+                        const SizedBox(width: 10),
+                        Text(
+                          fomattedDate,
+                          style: const TextStyle(color: kThemeDarkColor, fontSize: 14, fontWeight: FontWeight.w400),
+                        ),
+                        // CircleAvatar(
+                        //     radius: 15,
+                        //     child: Icon(
+                        //       CupertinoIcons.pen,
+                        //       color: Colors.white,
+                        //       size: 17,
+                        //     ))
                       ],
                     ),
-
-                    SizedBox(height: 10,),
-
-                    Divider(thickness: 0.5,color: Colors.grey,),
-
-                    SizedBox(height: 10,),
-
+                    const SizedBox(height: 5),
+                    const Divider(thickness: 0.5, color: Colors.grey),
+                    const SizedBox(height: 5),
                     Row(
-
                       children: [
-
-                        Icon(CupertinoIcons.clock_fill,size: 20,color: kThemeColor),
-
-                        SizedBox(width: 5,),
-
-                        _titleText("Time : "),
-
-                        SizedBox(width: 10,),
-
-                        Text(dataIndex.timeofExam ?? ""),
-
+                        Expanded(
+                          child: Text(
+                            dataIndex.sittingtypeName ?? "",
+                            style: const TextStyle(color: kThemeDarkColor, fontSize: 14, fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        Text(
+                          dataIndex.timeofExam ?? "",
+                          style: const TextStyle(color: kThemeDarkColor, fontSize: 14, fontWeight: FontWeight.w400),
+                        ),
                       ],
                     ),
-
-                    SizedBox(height: 10,),
-
-                    Row(
-
-                      children: [
-
-                        Icon(Icons.date_range,size: 20,color: kThemeColor),
-
-                        SizedBox(width: 5,),
-
-                        _titleText("Date : "),
-
-                        SizedBox(width: 10,),
-
-                        Text(extractDate(dataIndex.dateOfExam ?? "")),
-
-                      ],
-                    ),
-
-
-                    SizedBox(height: 10,),
-
-                    Row(
-                      children: [
-
-                        Icon(Icons.account_circle,size: 20,color: kThemeColor),
-
-                        SizedBox(width: 5,),
-
-                        _titleText("Sitting Id :"),
-
-                        SizedBox(width: 10,),
-
-                        Text("${dataIndex.sittingId} (${dataIndex.sittingtypeName})")
-
-                      ],
-                    )
-
-
-
+                    // Row(
+                    //   children: [
+                    //     Icon(CupertinoIcons.clock_fill, size: 20, color: kThemeColor),
+                    //     SizedBox(
+                    //       width: 5,
+                    //     ),
+                    //     _titleText("Time : "),
+                    //     SizedBox(
+                    //       width: 10,
+                    //     ),
+                    //     Text(dataIndex.timeofExam ?? ""),
+                    //   ],
+                    // ),
+                    // SizedBox(
+                    //   height: 10,
+                    // ),
+                    // Row(
+                    //   children: [
+                    //     Icon(Icons.date_range, size: 20, color: kThemeColor),
+                    //     SizedBox(
+                    //       width: 5,
+                    //     ),
+                    //     _titleText("Date : "),
+                    //     SizedBox(
+                    //       width: 10,
+                    //     ),
+                    //     Text(extractDate(dataIndex.dateOfExam ?? "")),
+                    //   ],
+                    // ),
+                    // SizedBox(
+                    //   height: 10,
+                    // ),
+                    // Row(
+                    //   children: [
+                    //     Icon(Icons.account_circle, size: 20, color: kThemeColor),
+                    //     SizedBox(
+                    //       width: 5,
+                    //     ),
+                    //     _titleText("Sitting Id :"),
+                    //     SizedBox(
+                    //       width: 10,
+                    //     ),
+                    //     Text("${dataIndex.sittingId} (${dataIndex.sittingtypeName})")
+                    //   ],
+                    // )
                   ],
                 ),
               ),
@@ -241,15 +236,10 @@ class ViewExamSchedule_State extends State<ViewExamSchedule>{
     );
   }
 
-  Widget _titleText(title){
-    return Text(title,
-      style: TextStyle(
-          color:kThemeColor,
-          fontSize: 14,
-          fontWeight: FontWeight.w600
-      ),
+  Widget _titleText(title) {
+    return Text(
+      title,
+      style: TextStyle(color: kThemeColor, fontSize: 14, fontWeight: FontWeight.w600),
     );
   }
-  
-  
 }
