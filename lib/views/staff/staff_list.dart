@@ -91,7 +91,7 @@ class StaffList_State extends State<StaffList> {
   Widget _staffList() {
     List<Data> filteredData;
     if (_selectedDept != null) {
-      filteredData = data.where((item) => item.eMPDEPTNAME == _selectedDept.toString()).toList();
+      filteredData = data.where((item) => item.departmentName == _selectedDept.toString()).toList();
     } else {
       filteredData = data.toList();
     }
@@ -112,23 +112,23 @@ class StaffList_State extends State<StaffList> {
             return InkWell(
               onTap: () {
                 Get.to(() => StaffDetails(), arguments: {
-                  'EmpName': '${dataIndex.eMPNAME ?? "-"}',
-                  'EmpId': '${dataIndex.empIdNo ?? "-"}',
-                  'EmpCode': '${dataIndex.eMPCODE ?? "-"}',
-                  'EMP_DOB': '${dataIndex.eMPDOB ?? "-"}',
-                  'EMP_MOB': '${dataIndex.eMPMOB ?? "-"}',
-                  'EMP_Mail': '${dataIndex.eMPMAILID ?? "-"}',
-                  'EMP_GNDR': '${dataIndex.eMPGNDR ?? "-"}',
-                  'EMP_DOJ': '${dataIndex.eMPDOJ ?? "-"}',
-                  'EMP_DESG_NAME': '${dataIndex.eMPDESGNAME ?? "-"}',
-                  'EMP_QUALIFICATION': '${dataIndex.eMPQUALIFICATION ?? "-"}',
-                  'EMP_ADH_NO': '${dataIndex.eMPADHNO ?? "-"}',
-                  'EMP_PAN_NO': '${dataIndex.eMPPANNO ?? "-"}',
-                  'EMP_TYP_CODE': '${dataIndex.eMPTYPCODE ?? "-"}',
-                  'photo': '${dataIndex.eMPPHTURL ?? "-"}',
-                  'EMP_DEPT_NAME': '${dataIndex.eMPDEPTNAME ?? "-"}',
-                  'EMP_ADRS_PRSN': '${dataIndex.eMPADRSPRSN ?? "-"}',
-                  'EMP_ADRS_PRMN': '${dataIndex.eMPADRSPRMN ?? "-"}',
+                  'EmpName': dataIndex.empName ?? "-",
+                  'EmpId': dataIndex.contactNo ?? "-",
+                  'EmpCode': '${dataIndex.empId ?? "-"}',
+                  'EMP_DOB': '',
+                  'EMP_MOB': '',
+                  'EMP_Mail': dataIndex.emailId ?? "-",
+                  'EMP_GNDR': '',
+                  'EMP_DOJ': '',
+                  'EMP_DESG_NAME': '',
+                  'EMP_QUALIFICATION': '',
+                  'EMP_ADH_NO': '',
+                  'EMP_PAN_NO': '',
+                  'EMP_TYP_CODE': '',
+                  'photo': dataIndex.empPhoto ?? "-",
+                  'EMP_DEPT_NAME': dataIndex.departmentName ?? "-",
+                  'EMP_ADRS_PRSN': dataIndex.subjectName ?? "-",
+                  'EMP_ADRS_PRMN': '',
                 });
               },
               child: Card(
@@ -150,9 +150,9 @@ class StaffList_State extends State<StaffList> {
                             decoration: BoxDecoration(
                                 border: Border.all(color: kThemeDarkColor, width: 1.5),
                                 shape: BoxShape.circle,
-                                image: dataIndex.eMPPHTURL.toString() == "null" || dataIndex.eMPPHTURL.toString().isEmpty
+                                image: dataIndex.empPhoto.toString() == "null" || dataIndex.empPhoto.toString().isEmpty
                                     ? DecorationImage(image: AssetImage("assets/img/as.png"))
-                                    : DecorationImage(image: NetworkImage(dataIndex.eMPPHTURL.toString() ?? "-"))),
+                                    : DecorationImage(image: NetworkImage(dataIndex.empPhoto.toString() ?? "-"))),
                           ),
                           SizedBox(
                             width: 20,
@@ -170,7 +170,7 @@ class StaffList_State extends State<StaffList> {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          "${dataIndex.eMPNAME.toString() ?? "-"}",
+                                          "${dataIndex.empName.toString() ?? "-"}",
                                           style: TextStyle(color: kThemeDarkColor, fontSize: 14, fontWeight: FontWeight.w600),
                                         ),
                                       ),
@@ -178,7 +178,7 @@ class StaffList_State extends State<StaffList> {
                                         color: kThemeColor,
                                         child: Padding(
                                           padding: EdgeInsets.only(left: 5, right: 5, bottom: 3, top: 3),
-                                          child: Text("${dataIndex.eMPGNDR.toString() ?? "-"}",
+                                          child: Text("${dataIndex.departmentName.toString() ?? "-"}",
                                               style: TextStyle(
                                                 fontFamily: kThemeFont,
                                                 fontWeight: FontWeight.w500,
@@ -193,14 +193,14 @@ class StaffList_State extends State<StaffList> {
                                     height: 2,
                                   ),
                                   Text(
-                                    "${dataIndex.empIdNo.toString() ?? "-"}",
+                                    "${dataIndex.contactNo.toString() ?? "-"}",
                                     style: TextStyle(color: kThemeDarkColor.withOpacity(0.6), fontSize: 12.5, fontWeight: FontWeight.w600),
                                   ),
                                   SizedBox(
                                     height: 2,
                                   ),
                                   Text(
-                                    "${dataIndex.eMPMAILID.toString() ?? "-"}",
+                                    "${dataIndex.emailId.toString() ?? "-"}",
                                     style: TextStyle(color: kThemeDarkColor.withOpacity(0.6), fontSize: 12, fontWeight: FontWeight.w600),
                                   )
                                 ],
@@ -214,32 +214,32 @@ class StaffList_State extends State<StaffList> {
                 ),
               ),
             );
-          } else if (dataIndex.eMPNAME.toString().toLowerCase().contains(_searchController.text.toLowerCase())) {
+          } else if (dataIndex.empName.toString().toLowerCase().contains(_searchController.text.toLowerCase())) {
             return InkWell(
               onTap: () {
                 Get.to(() => StaffDetails(), arguments: {
-                  'EmpName': '${dataIndex.eMPNAME ?? "-"}',
-                  'EmpId': '${dataIndex.empIdNo ?? "-"}',
-                  'EmpCode': '${dataIndex.eMPCODE ?? "-"}',
-                  'EMP_DOB': '${dataIndex.eMPDOB ?? "-"}',
-                  'EMP_MOB': '${dataIndex.eMPMOB ?? "-"}',
-                  'EMP_Mail': '${dataIndex.eMPMAILID ?? "-"}',
-                  'EMP_GNDR': '${dataIndex.eMPGNDR ?? "-"}',
-                  'EMP_DOJ': '${dataIndex.eMPDOJ ?? "-"}',
-                  'EMP_DESG_NAME': '${dataIndex.eMPDESGNAME ?? "-"}',
-                  'EMP_QUALIFICATION': '${dataIndex.eMPQUALIFICATION ?? "-"}',
-                  'EMP_ADH_NO': '${dataIndex.eMPADHNO ?? "-"}',
-                  'EMP_PAN_NO': '${dataIndex.eMPPANNO ?? "-"}',
-                  'EMP_TYP_CODE': '${dataIndex.eMPTYPCODE ?? "-"}',
-                  'photo': '${dataIndex.eMPPHTURL ?? "-"}',
-                  'EMP_DEPT_NAME': '${dataIndex.eMPDEPTNAME ?? "-"}',
-                  'EMP_ADRS_PRSN': '${dataIndex.eMPADRSPRSN ?? "-"}',
-                  'EMP_ADRS_PRMN': '${dataIndex.eMPADRSPRMN ?? "-"}',
+                  'EmpName': dataIndex.empName ?? "-",
+                  'EmpId': dataIndex.contactNo ?? "-",
+                  'EmpCode': '${dataIndex.empId ?? "-"}',
+                  'EMP_DOB': '',
+                  'EMP_MOB': '',
+                  'EMP_Mail': dataIndex.emailId ?? "-",
+                  'EMP_GNDR': '',
+                  'EMP_DOJ': '',
+                  'EMP_DESG_NAME': '',
+                  'EMP_QUALIFICATION': '',
+                  'EMP_ADH_NO': '',
+                  'EMP_PAN_NO': '',
+                  'EMP_TYP_CODE': '',
+                  'photo': dataIndex.empPhoto ?? "-",
+                  'EMP_DEPT_NAME': dataIndex.departmentName ?? "-",
+                  'EMP_ADRS_PRSN': dataIndex.subjectName ?? "-",
+                  'EMP_ADRS_PRMN': '',
                 });
               },
               child: Card(
                 elevation: 4,
-                margin: EdgeInsets.only(bottom: 20),
+                margin: const EdgeInsets.only(bottom: 20),
                 child: Padding(
                   padding: const EdgeInsets.only(right: 10, left: 10, top: 8, bottom: 8),
                   child: Column(
@@ -256,9 +256,9 @@ class StaffList_State extends State<StaffList> {
                             decoration: BoxDecoration(
                                 border: Border.all(color: kThemeDarkColor, width: 1.5),
                                 shape: BoxShape.circle,
-                                image: dataIndex.eMPPHTURL.toString() == "null" || dataIndex.eMPPHTURL.toString().isEmpty
+                                image: dataIndex.empPhoto.toString() == "null" || dataIndex.empPhoto.toString().isEmpty
                                     ? DecorationImage(image: AssetImage("assets/img/as.png"))
-                                    : DecorationImage(image: NetworkImage(dataIndex.eMPPHTURL.toString() ?? "-"))),
+                                    : DecorationImage(image: NetworkImage(dataIndex.empPhoto.toString() ?? "-"))),
                           ),
                           SizedBox(
                             width: 20,
@@ -276,7 +276,7 @@ class StaffList_State extends State<StaffList> {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          "${dataIndex.eMPNAME.toString() ?? "-"}",
+                                          "${dataIndex.empName.toString() ?? "-"}",
                                           style: TextStyle(color: kThemeDarkColor, fontSize: 14, fontWeight: FontWeight.w600),
                                         ),
                                       ),
@@ -284,7 +284,7 @@ class StaffList_State extends State<StaffList> {
                                         color: kThemeColor,
                                         child: Padding(
                                           padding: EdgeInsets.only(left: 5, right: 5, bottom: 3, top: 3),
-                                          child: Text("${dataIndex.eMPGNDR.toString() ?? "-"}",
+                                          child: Text("${dataIndex.departmentName.toString() ?? "-"}",
                                               style: TextStyle(
                                                 fontFamily: kThemeFont,
                                                 fontWeight: FontWeight.w500,
@@ -299,14 +299,14 @@ class StaffList_State extends State<StaffList> {
                                     height: 2,
                                   ),
                                   Text(
-                                    "${dataIndex.empIdNo.toString() ?? "-"}",
+                                    "${dataIndex.contactNo.toString() ?? "-"}",
                                     style: TextStyle(color: kThemeDarkColor.withOpacity(0.6), fontSize: 12.5, fontWeight: FontWeight.w600),
                                   ),
                                   SizedBox(
                                     height: 2,
                                   ),
                                   Text(
-                                    "${dataIndex.eMPMAILID.toString() ?? "-"}",
+                                    "${dataIndex.emailId.toString() ?? "-"}",
                                     style: TextStyle(color: kThemeDarkColor.withOpacity(0.6), fontSize: 12, fontWeight: FontWeight.w600),
                                   )
                                 ],
@@ -329,8 +329,8 @@ class StaffList_State extends State<StaffList> {
   }
 
   Widget _dropDown() {
-    Set<String> departments = Set<String>.from(data.map((item) => item.eMPDEPTNAME));
-    
+    Set<String> departments = Set<String>.from(data.map((item) => item.departmentName));
+
     return Card(
       elevation: 4,
       margin: EdgeInsets.only(
