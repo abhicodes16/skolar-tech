@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pns_skolar/model/queries/emp_model.dart';
 import 'package:pns_skolar/widget/success_dialouge.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
 import '../../model/course/branch_select_model.dart';
+import '../../model/queries/get_department_name.dart';
 import '../../repo/Course/select_class_repo.dart';
 import '../../style/assets_constants.dart';
 import '../../style/palette.dart';
@@ -42,34 +44,127 @@ class _PostQueryDialogState extends State<PostQueryDialog> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    selectBranchApi();
+    getDepartments();
   }
 
+/*
   bool loading = false;
   List<BranchSelectDataModel> _selectBranchModelList = [];
+*/
   int? selectedBranchValue;
+  int? selectedEmpValue;
 
+  var schoolCode;
+  var token;
 
-  Future<void> selectBranchApi() async {
+  bool departmentLoading = false;
 
+  var departmentData = <DepartmentData>[];
+
+  Future<void> getDepartments() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
-      loading = true;
+      schoolCode = pref.getString('schoolCode');
+      token = pref.getString('token');
+      departmentLoading = true;
+      print("--->$token");
+      print("--->$schoolCode");
     });
-    SelectClassRepo selectClassRepo = SelectClassRepo();
-    try {
-      BranchSelectModel data = await selectClassRepo.fetchBranchData();
 
-      if (data.success!) {
+    try{
+      final params = {
+        'schoolCode': '$schoolCode',
+      };
+
+      final uri = Uri.parse(ApiConstant.GET_DEPARTMENT_NAMES)
+          .replace(queryParameters: params);
+
+      final response = await http.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': ApiConstant.API_KEY,
+          'token': token
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final DepartmentModel questionHistory =
+        DepartmentModel.fromJson(json.decode(response.body));
+
         setState(() {
-          _selectBranchModelList = data.data!;
+          departmentData = questionHistory.data ?? [];
+          selectedBranchValue = questionHistory.data![0].departmentId;
         });
+        getEmp();
+
+      } else {
+        ErrorDialouge.showErrorDialogue(context, "Something is Wrong please try again later");
+        print('Error: ${response.reasonPhrase}, Status Code: ${response.statusCode}');
       }
-    } catch (e) {
-      print('Exeption $e');
-      print('$selectedBranchValue');
-    }finally{
+    }catch (e) {
+      ErrorDialouge.showErrorDialogue(
+          context, "Something is Wrong please try again later");
+      print('Error decoding JSON: $e');
+    } finally {
       setState(() {
-        loading = false;
+        departmentLoading = false;
+      });
+    }
+  }
+
+  bool empLoading = false;
+  var empData = <EmpData>[];
+
+  Future<void> getEmp() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      schoolCode = pref.getString('schoolCode');
+      token = pref.getString('token');
+      empLoading = true;
+      print("--->$token");
+      print("--->$schoolCode");
+    });
+
+    try{
+      final params = {
+        'schoolCode': '$schoolCode',
+      };
+
+      final uri = Uri.parse(ApiConstant.GET_EMP_NAMES)
+          .replace(queryParameters: params);
+
+      final response = await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': ApiConstant.API_KEY,
+          'token': token
+        },
+        body: jsonEncode({
+          'departmentId' : selectedBranchValue.toString()
+        })
+      );
+
+      if (response.statusCode == 200) {
+        final EmpModel data =
+        EmpModel.fromJson(json.decode(response.body));
+
+        setState(() {
+          empData = data.data ?? [];
+        });
+
+      } else {
+        ErrorDialouge.showErrorDialogue(context, "Something is Wrong please try again later");
+        print('Error: ${response.reasonPhrase}, Status Code: ${response.statusCode}');
+      }
+    }catch (e) {
+      ErrorDialouge.showErrorDialogue(
+          context, "Something is Wrong please try again later");
+      print('Error decoding JSON: $e');
+    } finally {
+      setState(() {
+        empLoading = false;
       });
     }
   }
@@ -98,8 +193,8 @@ class _PostQueryDialogState extends State<PostQueryDialog> {
                 content: Container(
                   width: width,
                   child:
-                  loading ?
-                  Container(height: height*0.4,child: Center(child: SizedBox(width: 30,height: 30,child: CircularProgressIndicator())),)
+                  departmentLoading ?
+                  Container(height: height*0.4,child: const Center(child: SizedBox(width: 30,height: 30,child: CircularProgressIndicator())),)
                       :
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -107,35 +202,66 @@ class _PostQueryDialogState extends State<PostQueryDialog> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
 
-                      SizedBox(height: 30,),
+                      const SizedBox(height: 30,),
 
-                      Align(
+                      const Align(
                           alignment: Alignment.center,
                           child: Text("Enter Your Query")
                       ),
 
-                      SizedBox(height: 20,),
+                      const SizedBox(height: 20,),
 
 
+                      departmentLoading ?
+                      const Center(child: SizedBox(width: 20,height: 20,child: CircularProgressIndicator(),))
+                          :
+                      departmentData.isEmpty ?
+                      const SizedBox()
+                      :
                       CustomDropdown<String>(
                         decoration: CustomDropdownDecoration(expandedFillColor: Colors.white,closedFillColor: Colors.grey.shade200),
                         hintText: 'Select Month',
-                        items: List.generate(_selectBranchModelList.length, (index) {
+                        items: List.generate(departmentData.length, (index) {
 
-                          return "${_selectBranchModelList[index].cLSNAME.toString()}";
+                          return "${departmentData[index].departmentName.toString()}";
                         }),
-                        initialItem: "${_selectBranchModelList[0].cLSNAME.toString()}",
+                        initialItem: "${departmentData[0].departmentName.toString()}",
                         onChanged: (value) {
                           setState(() {
-                            selectedBranchValue = _selectBranchModelList
-                                .firstWhere((branch) => branch.cLSNAME == value).cLSCODE; // Assuming id is the property storing the ID
-
+                            selectedBranchValue = departmentData
+                                .firstWhere((branch) => branch.departmentName == value).departmentId; // Assuming id is the property storing the ID
                             print("code --->${selectedBranchValue}");
+                            getEmp();
                           });
                         },
                       ),
 
-                      SizedBox(height: 20,),
+                      const SizedBox(height: 20,),
+
+
+                      empLoading ?
+                      const Center(child: SizedBox(width: 20,height: 20,child: CircularProgressIndicator(),))
+                          :
+                      empData.isEmpty ?
+                      const SizedBox()
+                          :
+                      CustomDropdown<String>(
+                        decoration: CustomDropdownDecoration(expandedFillColor: Colors.white,closedFillColor: Colors.grey.shade200),
+                        hintText: 'Select Month',
+                        items: List.generate(empData.length, (index) {
+
+                          return "${empData[index].empName.toString()}";
+                        }),
+                        initialItem: "${empData[0].empName.toString()}",
+                        onChanged: (value) {
+                          setState(() {
+                            selectedEmpValue = empData
+                                .firstWhere((branch) => branch.empName == value).empId; // Assuming id is the property storing the ID
+                          });
+                        },
+                      ),
+
+                      const SizedBox(height: 20,),
 
 
 
@@ -152,7 +278,7 @@ class _PostQueryDialogState extends State<PostQueryDialog> {
                               "Query")
                       ),
 
-                      SizedBox(height: 20,),
+                      const SizedBox(height: 20,),
 
                       _sbmitBtn()
                     ],
@@ -161,8 +287,8 @@ class _PostQueryDialogState extends State<PostQueryDialog> {
               ),
             ),
 
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
               child: CircleAvatar(radius: 35,
                 child: Icon(Icons.question_mark,color: Colors.white,size: 35),
               ),
@@ -176,7 +302,7 @@ class _PostQueryDialogState extends State<PostQueryDialog> {
   InputDecoration _MobiletextFieldDecoration({String? label}) {
     return InputDecoration(
       hintText: "Enter Query",
-      suffixIcon: Icon(Icons.messenger,),
+      suffixIcon: const Icon(Icons.messenger,),
       counter: const Offstage(),
       enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -222,15 +348,15 @@ class _PostQueryDialogState extends State<PostQueryDialog> {
         ),
         child:
         submitLoading?
-        Center(child:  SizedBox(width: 30,height: 30,child: CircularProgressIndicator(color: Colors.white,)),)
+        const Center(child:  SizedBox(width: 30,height: 30,child: CircularProgressIndicator(color: Colors.white,)),)
             :
         Center(child: Text("Submit",style: Palette.whiteBtnTxt,)),
       ),
     );
   }
-
-  var schoolCode;
-  var token;
+  //
+  // var schoolCode;
+  // var token;
   var userID;
 
 

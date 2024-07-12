@@ -31,62 +31,50 @@ class GetReplyStudent {
 }
 
 class Data {
-  int? id;
-  int? studentCode;
-  String? studentName;
-  int? branchId;
-  String? branchName;
-  String? typeName;
-  int? fromId;
-  Null? fromName;
-  String? details;
-  String? createdDate;
+  int? replyId;
+  int? replyBy;
+  String? teacherName;
+  String? replyById;
+  String? queryTitle;
+  String? queryDetails;
   String? replyDetails;
-  String? replyDate;
+  String? replyAttachment;
+  String? createdDatetime;
 
   Data(
-      {this.id,
-        this.studentCode,
-        this.studentName,
-        this.branchId,
-        this.branchName,
-        this.typeName,
-        this.fromId,
-        this.fromName,
-        this.details,
-        this.createdDate,
+      {this.replyId,
+        this.replyBy,
+        this.teacherName,
+        this.replyById,
+        this.queryTitle,
+        this.queryDetails,
         this.replyDetails,
-        this.replyDate});
+        this.replyAttachment,
+        this.createdDatetime});
 
   Data.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    studentCode = json['studentCode'];
-    studentName = json['studentName'];
-    branchId = json['branchId'];
-    branchName = json['branchName'];
-    typeName = json['typeName'];
-    fromId = json['fromId'];
-    fromName = json['fromName'];
-    details = json['details'];
-    createdDate = json['createdDate'];
+    replyId = json['replyId'];
+    replyBy = json['replyBy'];
+    teacherName = json['teacherName'];
+    replyById = json['replyById'];
+    queryTitle = json['queryTitle'];
+    queryDetails = json['queryDetails'];
     replyDetails = json['replyDetails'];
-    replyDate = json['replyDate'];
+    replyAttachment = json['replyAttachment'];
+    createdDatetime = json['createdDatetime'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['studentCode'] = this.studentCode;
-    data['studentName'] = this.studentName;
-    data['branchId'] = this.branchId;
-    data['branchName'] = this.branchName;
-    data['typeName'] = this.typeName;
-    data['fromId'] = this.fromId;
-    data['fromName'] = this.fromName;
-    data['details'] = this.details;
-    data['createdDate'] = this.createdDate;
+    data['replyId'] = this.replyId;
+    data['replyBy'] = this.replyBy;
+    data['teacherName'] = this.teacherName;
+    data['replyById'] = this.replyById;
+    data['queryTitle'] = this.queryTitle;
+    data['queryDetails'] = this.queryDetails;
     data['replyDetails'] = this.replyDetails;
-    data['replyDate'] = this.replyDate;
+    data['replyAttachment'] = this.replyAttachment;
+    data['createdDatetime'] = this.createdDatetime;
     return data;
   }
 }

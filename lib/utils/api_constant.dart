@@ -120,10 +120,15 @@ class ApiConstant {
   static const String ACADEMIC_CALENDAR = '$API_URL/postAcademicCalendar';
 
   //Queries
-  static const String GET_QUERIES_TEACHER = '$API_URL/getStudentSendQueryBYFaculty';
+  static const String GET_QUERIES_TEACHER = '$API_URL/getStudentQueryByTeacher';
   static const String POST_REPLY_TEACHER = '$API_URL/postReplyForStudentSendQuery';
   static const String GET_REPLY_FROM_TEACHER = '$API_URL/getReplyDtlsForStudentSendQuery';
   static const String POST_QUERY = '$API_URL/postStudentSendQuery';
+  static const String GET_DEPARTMENT_NAMES = '$API_URL/getEmpDepartmentName';
+  static const String GET_EMP_NAMES = '$API_URL/postDeptWiseEmployeeName';
+  static const String STUDENT_POST_QUERY = '$API_URL/postStudentQuery';
+  static const String GET_STUDENT_QUERY = '$API_URL/getQueryReplyByStudent';
+  static const String TEACHER_POST_REPLY = '$API_URL/postQueryReply';
 
   //Staff
   static const String GET_STAFF_DATA = '$API_URL/getStaffMembersDetails';

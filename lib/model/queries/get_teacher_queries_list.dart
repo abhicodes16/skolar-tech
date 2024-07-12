@@ -1,12 +1,12 @@
-class getTeacherQueries {
+class GetTeacherQueries {
   bool? success;
   String? message;
   int? responseCode;
   List<Data>? data;
 
-  getTeacherQueries({this.success, this.message, this.responseCode, this.data});
+  GetTeacherQueries({this.success, this.message, this.responseCode, this.data});
 
-  getTeacherQueries.fromJson(Map<String, dynamic> json) {
+  GetTeacherQueries.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
     responseCode = json['responseCode'];
@@ -31,54 +31,50 @@ class getTeacherQueries {
 }
 
 class Data {
-  int? id;
-  int? studentCode;
+  int? queryID;
+  int? teacherID;
+  String? teacherName;
+  int? studentID;
   String? studentName;
-  int? branchId;
-  String? branchName;
-  String? typeName;
-  int? fromId;
-  Null? fromName;
-  String? details;
-  String? createdDate;
+  String? queryTitle;
+  String? queryDetails;
+  String? queryAttachment;
+  String? createdDatetime;
 
   Data(
-      {this.id,
-        this.studentCode,
+      {this.queryID,
+        this.teacherID,
+        this.teacherName,
+        this.studentID,
         this.studentName,
-        this.branchId,
-        this.branchName,
-        this.typeName,
-        this.fromId,
-        this.fromName,
-        this.details,
-        this.createdDate});
+        this.queryTitle,
+        this.queryDetails,
+        this.queryAttachment,
+        this.createdDatetime});
 
   Data.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    studentCode = json['studentCode'];
+    queryID = json['queryID'];
+    teacherID = json['teacherID'];
+    teacherName = json['teacherName'];
+    studentID = json['studentID'];
     studentName = json['studentName'];
-    branchId = json['branchId'];
-    branchName = json['branchName'];
-    typeName = json['typeName'];
-    fromId = json['fromId'];
-    fromName = json['fromName'];
-    details = json['details'];
-    createdDate = json['createdDate'];
+    queryTitle = json['queryTitle'];
+    queryDetails = json['queryDetails'];
+    queryAttachment = json['queryAttachment'];
+    createdDatetime = json['createdDatetime'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['studentCode'] = this.studentCode;
+    data['queryID'] = this.queryID;
+    data['teacherID'] = this.teacherID;
+    data['teacherName'] = this.teacherName;
+    data['studentID'] = this.studentID;
     data['studentName'] = this.studentName;
-    data['branchId'] = this.branchId;
-    data['branchName'] = this.branchName;
-    data['typeName'] = this.typeName;
-    data['fromId'] = this.fromId;
-    data['fromName'] = this.fromName;
-    data['details'] = this.details;
-    data['createdDate'] = this.createdDate;
+    data['queryTitle'] = this.queryTitle;
+    data['queryDetails'] = this.queryDetails;
+    data['queryAttachment'] = this.queryAttachment;
+    data['createdDatetime'] = this.createdDatetime;
     return data;
   }
 }
