@@ -30,6 +30,7 @@ class LoginRepo {
       },
     );
     print('Response::$response');
+    print(schoolCode);
 
     return LoginModel.fromJson(response);
   }

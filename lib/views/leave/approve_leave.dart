@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../style/palette.dart';
@@ -15,17 +16,19 @@ import '../../widget/loading_dialogue.dart';
 import '../../widget/success_home_dialog.dart';
 import '../../widget/toast.dart';
 
-class ReplyDialog extends StatefulWidget {
-  final String queryId;
+class ApproveDialog extends StatefulWidget {
+  final String leaveId;
+  final String status;
 
-  const ReplyDialog({Key? key, required this.queryId}) : super(key: key);
+  const ApproveDialog({Key? key, required this.status, required this.leaveId})
+      : super(key: key);
 
   @override
-  _ReplyDialogState createState() => _ReplyDialogState();
+  _ApproveDialogState createState() => _ApproveDialogState();
 }
 
-class _ReplyDialogState extends State<ReplyDialog> {
-  final TextEditingController _replyController = TextEditingController();
+class _ApproveDialogState extends State<ApproveDialog> {
+  final TextEditingController _remarkController = TextEditingController();
 
   bool submitLoading = false;
 
@@ -57,30 +60,61 @@ class _ReplyDialogState extends State<ReplyDialog> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       ),
                       Align(
                           alignment: Alignment.center,
-                          child: Text("Enter Your Reply")),
-                      SizedBox(
+                          child: Text(widget.status == "A"
+                              ? "Approve Leave"
+                              : "Reject Leave")),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.status == "A"
+                                ? "Approval Date : "
+                                : "Rejection Date : ",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.0,
+                                color: Colors.black),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: Text(
+                              "${DateFormat('dd MMM yyyy').format(DateTime.now())}",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14.0,
+                                  color: Colors.red.shade500),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
                         height: 20,
                       ),
                       TextFormField(
-                          controller: _replyController,
-                          maxLines: 2,
+                          controller: _remarkController,
+                          maxLines: 1,
                           keyboardType: TextInputType.text,
                           style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16,
                           ),
                           decoration:
-                              _MobiletextFieldDecoration(label: "Reply")),
-                      SizedBox(
+                              _MobiletextFieldDecoration(label: "Remark")),
+                      const SizedBox(
                         height: 20,
                       ),
-                      _atteachedImgWidget(),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       _sbmitBtn()
@@ -90,10 +124,12 @@ class _ReplyDialogState extends State<ReplyDialog> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: CircleAvatar(
                 radius: 35,
-                child: Icon(Icons.reply, color: Colors.white, size: 35),
+                child: widget.status == "A"
+                    ? Icon(Icons.check, color: Colors.white, size: 35)
+                    : Icon(Icons.close, color: Colors.white, size: 35),
               ),
             ),
           ],
@@ -102,74 +138,10 @@ class _ReplyDialogState extends State<ReplyDialog> {
     );
   }
 
-  Future<void> openFilePicker() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pdf', 'doc'],
-    );
-
-    if (result != null) {
-      PlatformFile file = result.files.first;
-
-      setState(() {
-        selectedFilePath = file.path!;
-        selectedFileName = file.name;
-      });
-      //sendFileToApi(filePath: file.path!);
-    } else {
-      // User canceled the picker
-    }
-  }
-
-  Widget _atteachedImgWidget() {
-    return Card(
-      shape: Palette.cardShape,
-      margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-      elevation: 0,
-      color: kThemeColor.withOpacity(0.1),
-      child: InkWell(
-        onTap: openFilePicker,
-        child: SizedBox(
-          height: 80,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Center(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.attach_file, color: Colors.grey),
-                    selectedFileName != null
-                        ? Container(
-                            // width: Get.width*0.8,
-                            child: Text(
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              '  $selectedFileName',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: width * 0.03,
-                              ),
-                            ),
-                          )
-                        : Text(
-                            '  Attech PDF / Documents',
-                            style: Palette.subTitleGrey,
-                          ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   InputDecoration _MobiletextFieldDecoration({String? label}) {
     return InputDecoration(
-      hintText: "Enter Reply",
-      suffixIcon: Icon(
+      hintText: "Enter Remark",
+      suffixIcon: const Icon(
         Icons.messenger,
       ),
       counter: const Offstage(),
@@ -200,7 +172,7 @@ class _ReplyDialogState extends State<ReplyDialog> {
   String? selectedFilePath;
   String? selectedFileName;
 
-  Future<void> _uploadFile() async {
+  Future<void> _approveLeave() async {
     LoadingDialog.showLoadingDialog(context);
     SharedPreferences pref = await SharedPreferences.getInstance();
 
@@ -209,42 +181,27 @@ class _ReplyDialogState extends State<ReplyDialog> {
       'schoolCode': '$schoolCode',
     };
 
-    var request = http.MultipartRequest(
-        "POST",
-        Uri.parse('${ApiConstant.TEACHER_POST_REPLY}')
+    var headers = {
+      'apikey': ApiConstant.API_KEY,
+      'Content-Type': 'application/json',
+      'token': pref.getString('token')!,
+    };
+
+    var request = http.Request(
+        'POST',
+        Uri.parse('${ApiConstant.APPROVE_LEAVE}')
             .replace(queryParameters: params));
 
-    request.headers['token'] = pref.getString('token')!;
-    request.headers['apikey'] = ApiConstant.API_KEY;
-    request.headers['Content-Type'] = 'multipart/form-data';
-
-    request.fields['replyById'] = widget.queryId.toString();
-    request.fields['replyDetails'] = _replyController.text.toString();
-
-    if (selectedFilePath == null) {
-      selectedFilePath = null;
-    } else {
-      var uploadFile = await http.MultipartFile.fromPath(
-        "replyAttachment",
-        selectedFilePath!,
-        contentType: MediaType('application', 'pdf'),
-      );
-      request.files.add(uploadFile);
-    }
-
-    print('Requested Fields:');
-    print('Fields: ${request.fields}');
-    print('File Details:');
-    request.files.forEach((element) {
-      print("field :::::: ${element.field}");
-      print('File Name: ${element.filename}');
-      print('Content Type: ${element.contentType}');
-      print('Size: ${element.length}');
+    request.body = json.encode({
+      "leaveId": "${widget.leaveId}",
+      "approvalStatus": "${widget.status}",
+      "approvalDate": "${DateFormat('yyyy-MM-dd').format(DateTime.now())}",
+      "approvalRemarks": _remarkController.text.toString()
     });
+    request.headers.addAll(headers);
 
-    // Send JSON payload using POST request
-    var response = await request.send();
-
+    print("${request.body}");
+    http.StreamedResponse response = await request.send();
     var responsed = await http.Response.fromStream(response);
     // Listen for response
     try {
@@ -276,13 +233,10 @@ class _ReplyDialogState extends State<ReplyDialog> {
   Widget _sbmitBtn() {
     return InkWell(
       onTap: () {
-        if (_replyController.text.isEmpty) {
-          Utils().themetoast("Please Enter Your Reply");
-        } else if (selectedFilePath == null) {
-          ErrorDialouge.showErrorDialogue(
-              context, 'Please Atteched Document or File');
+        if (_remarkController.text.isEmpty) {
+          Utils().themetoast("Please Enter Remark");
         } else {
-          _uploadFile();
+          _approveLeave();
         }
       },
       child: Container(
@@ -293,7 +247,7 @@ class _ReplyDialogState extends State<ReplyDialog> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: submitLoading
-            ? Center(
+            ? const Center(
                 child: SizedBox(
                     width: 30,
                     height: 30,
@@ -315,7 +269,7 @@ class _ReplyDialogState extends State<ReplyDialog> {
 
   @override
   void dispose() {
-    _replyController.dispose();
+    _remarkController.dispose();
     super.dispose();
   }
 }

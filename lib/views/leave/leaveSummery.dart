@@ -93,7 +93,7 @@ class LeaveSummery_State extends State<LeaveSummery>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Leave Summery', style: Palette.appbarTitle),
+        title: Text('Leave Summary', style: Palette.appbarTitle),
         flexibleSpace: Container(decoration: Palette.appbarGradient),
         elevation: 0,
       ),

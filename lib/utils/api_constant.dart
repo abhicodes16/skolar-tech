@@ -96,6 +96,10 @@ class ApiConstant {
   static const String POST_LEAVE = '$API_URL/postEmployeeLeaveApply';
   static const String GET_LEAVE_STATUS = '$API_URL/getEmployeeLeaveApplyStatus';
   static const String GET_LEAVE_SUMMERY = '$API_URL/getEmployeeLeaveSummary';
+  static const String GET_LEAVE_APPROVAL_STATUS = '$API_URL/getEmployeeLeaveApprovalStatus';
+  static const String APPROVE_LEAVE = '$API_URL/postEmployeeLeaveApproval';
+  static const String GET_EMP_COL_ENTRY = '$API_URL/getEmployeeCOLEntryStatus';
+  static const String ADD_EMP_COL_ENTRY = '$API_URL/postEmployeeCOLEntry';
 
 
 

@@ -8,6 +8,13 @@ class DateFormatter {
     return selectedDate;
   }
 
+  static String newConvertDateFormat(String dateTimeString) {
+    DateTime dateTime = DateFormat('dd-MM-yyyy').parse(dateTimeString);
+    DateFormat newDateFormat = DateFormat('yyyy-MM-dd');
+    String selectedDate = newDateFormat.format(dateTime);
+    return selectedDate;
+  }
+
   static String convertDateTimeFormat(String dateTimeString) {
     DateTime dateTime = DateFormat('yyyy-MM-ddThh:mm').parse(dateTimeString);
     DateFormat newDateFormat = DateFormat('dd-MM-yyyy hh:mm a');

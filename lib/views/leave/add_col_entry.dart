@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:intl/intl.dart';
+import 'package:pns_skolar/widget/date_formatter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../style/palette.dart';
@@ -16,19 +17,17 @@ import '../../widget/loading_dialogue.dart';
 import '../../widget/success_home_dialog.dart';
 import '../../widget/toast.dart';
 
-class ApproveDialog extends StatefulWidget {
-  final String leaveId;
-  final String status;
+class AddColDialog extends StatefulWidget {
 
-  const ApproveDialog({Key? key, required this.status, required this.leaveId})
+  const AddColDialog({Key? key,})
       : super(key: key);
 
   @override
-  _ApproveDialogState createState() => _ApproveDialogState();
+  _AddColDialogState createState() => _AddColDialogState();
 }
 
-class _ApproveDialogState extends State<ApproveDialog> {
-  final TextEditingController _remarkController = TextEditingController();
+class _AddColDialogState extends State<AddColDialog> {
+  final TextEditingController _descriptionController = TextEditingController();
 
   bool submitLoading = false;
 
@@ -53,64 +52,62 @@ class _ApproveDialogState extends State<ApproveDialog> {
               child: AlertDialog(
                 //key: key,
                 //backgroundColor: Colors.white,
-                content: Container(
+                content: SizedBox(
                   width: width,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const SizedBox(
                         height: 30,
                       ),
-                      Align(
+                      const Align(
                           alignment: Alignment.center,
-                          child: Text(widget.status == "A"
-                              ? "Approve Leave"
-                              : "Reject Leave")),
+                          child: Text("Employee COL Entry")),
                       const SizedBox(
                         height: 20,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.status == "A"
-                                ? "Approval Date : "
-                                : "Rejection Date : ",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14.0,
-                                color: Colors.black),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: Text(
-                              "${DateFormat('dd MMM yyyy').format(DateTime.now())}",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14.0,
-                                  color: Colors.red.shade500),
-                            ),
-                          ),
-                        ],
+                      const Text("Select Start Date : ",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.0,
+                            color: Colors.black),
                       ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+
+                      selectStartDatePicker(),
+
+                      const SizedBox(
+                        height: 10,
+                      ),
+
+                      const Text("Select End Date : ",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.0,
+                            color: Colors.black),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      selectEndDatePicker(),
+
                       const SizedBox(
                         height: 20,
                       ),
                       TextFormField(
-                          controller: _remarkController,
-                          maxLines: 1,
+                          controller: _descriptionController,
+                          maxLines: 2,
                           keyboardType: TextInputType.text,
                           style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16,
                           ),
                           decoration:
-                              _MobiletextFieldDecoration(label: "Remark")),
+                              _MobiletextFieldDecoration(label: "Description")),
                       const SizedBox(
                         height: 20,
                       ),
@@ -123,13 +120,11 @@ class _ApproveDialogState extends State<ApproveDialog> {
                 ),
               ),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.all(8.0),
               child: CircleAvatar(
                 radius: 35,
-                child: widget.status == "A"
-                    ? Icon(Icons.check, color: Colors.white, size: 35)
-                    : Icon(Icons.close, color: Colors.white, size: 35),
+                child:Icon(Icons.add, color: Colors.white, size: 35),
               ),
             ),
           ],
@@ -138,9 +133,137 @@ class _ApproveDialogState extends State<ApproveDialog> {
     );
   }
 
+  TextEditingController startDateController = TextEditingController();
+  TextEditingController endDateController = TextEditingController();
+
+  Widget selectStartDatePicker() {
+    return Container(
+      // margin: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+      child: Center(
+        child: TextField(
+          controller: startDateController,
+          decoration: etBoxDecoration('Start Date'),
+          readOnly: true,
+          onTap: () async {
+            DateTime? pickedDate = await showDatePicker(
+                builder: (context, child) {
+                  return Theme(
+                    data: Theme.of(context).copyWith(
+                      colorScheme: const ColorScheme.light(
+                        primary: kThemeColor,
+                        onPrimary: kWhite,
+                        onSurface: kThemeColor,
+                      ),
+                      textButtonTheme: TextButtonThemeData(
+                        style: TextButton.styleFrom(
+                          primary: Colors.red,
+                        ),
+                      ),
+                    ),
+                    child: child!,
+                  );
+                },
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2101));
+
+            if (pickedDate != null) {
+              print(pickedDate);
+              String formattedDate =
+              DateFormat('dd-MM-yyyy').format(pickedDate);
+              print(formattedDate);
+              setState(() {
+                startDateController.text = formattedDate;
+              });
+            } else {
+              print("Date is not selected");
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget selectEndDatePicker() {
+    return Container(
+      // margin: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+      child: Center(
+        child: TextField(
+          controller: endDateController,
+          decoration: etBoxDecoration('End Date'),
+          readOnly: true,
+          onTap: () async {
+            DateTime? pickedDate = await showDatePicker(
+                builder: (context, child) {
+                  return Theme(
+                    data: Theme.of(context).copyWith(
+                      colorScheme: const ColorScheme.light(
+                        primary: kThemeColor,
+                        onPrimary: kWhite,
+                        onSurface: kThemeColor,
+                      ),
+                      textButtonTheme: TextButtonThemeData(
+                        style: TextButton.styleFrom(
+                          primary: Colors.red,
+                        ),
+                      ),
+                    ),
+                    child: child!,
+                  );
+                },
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2101));
+
+            if (pickedDate != null) {
+              print(pickedDate);
+              String formattedDate =
+              DateFormat('dd-MM-yyyy').format(pickedDate);
+              print(formattedDate);
+              setState(() {
+                endDateController.text = formattedDate;
+              });
+            } else {
+              print("Date is not selected");
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+
+  InputDecoration etBoxDecoration(String label) {
+    return InputDecoration(
+      fillColor: white,
+      filled: true,
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: kThemeColor.withOpacity(0.1), width: 2.0),
+        borderRadius: BorderRadius.circular(7.0),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: kThemeColor.withOpacity(0.1), width: 2.0),
+        borderRadius: BorderRadius.circular(7.0),
+      ),
+      border: OutlineInputBorder(
+        borderSide: BorderSide(color: kThemeColor.withOpacity(0.1), width: 2.0),
+        borderRadius: BorderRadius.circular(7.0),
+      ),
+      disabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: kThemeColor.withOpacity(0.1), width: 2.0),
+        borderRadius: BorderRadius.circular(7.0),
+      ),
+      contentPadding: const EdgeInsets.all(15.0),
+      hintText: label,
+      hintStyle: const TextStyle(color: Colors.grey),
+    );
+  }
+
   InputDecoration _MobiletextFieldDecoration({String? label}) {
     return InputDecoration(
-      hintText: "Enter Reply",
+      hintText: "Enter Description",
       suffixIcon: const Icon(
         Icons.messenger,
       ),
@@ -169,10 +292,8 @@ class _ApproveDialogState extends State<ApproveDialog> {
     );
   }
 
-  String? selectedFilePath;
-  String? selectedFileName;
 
-  Future<void> _approveLeave() async {
+  Future<void> addColEntry() async {
     LoadingDialog.showLoadingDialog(context);
     SharedPreferences pref = await SharedPreferences.getInstance();
 
@@ -189,14 +310,13 @@ class _ApproveDialogState extends State<ApproveDialog> {
 
     var request = http.Request(
         'POST',
-        Uri.parse('${ApiConstant.APPROVE_LEAVE}')
+        Uri.parse('${ApiConstant.ADD_EMP_COL_ENTRY}')
             .replace(queryParameters: params));
 
     request.body = json.encode({
-      "leaveId": "${widget.leaveId}",
-      "approvalStatus": "${widget.status}",
-      "approvalDate": "${DateFormat('yyyy-MM-dd').format(DateTime.now())}",
-      "approvalRemarks": _remarkController.text.toString()
+      "fromDate": "${DateFormatter.newConvertDateFormat(startDateController.text.toString())}",
+      "toDate": "${DateFormatter.newConvertDateFormat(endDateController.text.toString())}",
+      "descriptions": _descriptionController.text.toString()
     });
     request.headers.addAll(headers);
 
@@ -233,10 +353,10 @@ class _ApproveDialogState extends State<ApproveDialog> {
   Widget _sbmitBtn() {
     return InkWell(
       onTap: () {
-        if (_remarkController.text.isEmpty) {
-          Utils().themetoast("Please Enter Remark");
+        if (_descriptionController.text.isEmpty) {
+          Utils().themetoast("Please Enter Description");
         } else {
-          _approveLeave();
+          addColEntry();
         }
       },
       child: Container(
@@ -269,7 +389,7 @@ class _ApproveDialogState extends State<ApproveDialog> {
 
   @override
   void dispose() {
-    _remarkController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 }

@@ -1,27 +1,26 @@
 import 'package:get/get.dart';
 
-import '../model/leave/leave_approval_model.dart';
+import '../model/leave/emp_col_entry.dart';
 import '../repo/leave/leave_repo.dart';
 import '../utils/response.dart';
-import '../widget/loading_dialogue.dart';
 
-class LeaveApprovalCnt extends GetxController {
+class EmpColCnt extends GetxController {
   final _api = LeaveRepository();
 
   final rxRequestStatus = Status.LOADING.obs;
-  final leaveApprovalData = LeaveApprovalStatusModel().obs;
+  final colEntryData = EmpColEntryModel().obs;
   RxString error = ''.obs;
 
   void setRxRequestStatus(Status value) => rxRequestStatus.value = value;
 
   void setError(String value) => error.value = value;
 
-  void setListData(LeaveApprovalStatusModel value) {
-    leaveApprovalData.value = value;
+  void setListData(EmpColEntryModel value) {
+    colEntryData.value = value;
   }
 
-  void leaveListApi() {
-    _api.getApprovalData().then((value) {
+  void getEntryData() {
+    _api.getColEntry().then((value) {
       setRxRequestStatus(Status.COMPLETED);
       setListData(value);
     }).onError((error, stackTrace) {
@@ -32,6 +31,6 @@ class LeaveApprovalCnt extends GetxController {
 
   void refreshApi() {
     setRxRequestStatus(Status.LOADING);
-    leaveListApi();
+    getEntryData();
   }
 }

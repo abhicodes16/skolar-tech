@@ -13,8 +13,10 @@ import 'package:pns_skolar/views/exam/exam_schedule.dart';
 import 'package:pns_skolar/views/feedback/feedback_entity.dart';
 import 'package:pns_skolar/views/holiday/holidays.dart';
 import 'package:pns_skolar/views/leave/applyForleave.dart';
+import 'package:pns_skolar/views/leave/emp_col_entry.dart';
 import 'package:pns_skolar/views/leave/leaveStatus.dart';
 import 'package:pns_skolar/views/leave/leaveSummery.dart';
+import 'package:pns_skolar/views/leave/leave_approval_status.dart';
 import 'package:pns_skolar/views/library/library_management.dart';
 import 'package:pns_skolar/views/news/news.dart';
 import 'package:pns_skolar/views/notice/notice.dart';
@@ -307,7 +309,7 @@ class _BodyState extends State<Body> {
                                         6, 2, 6, 2),
                                     child: Text(
                                       unread,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.red,
                                         fontSize: 12.5,
                                       ),
@@ -341,7 +343,7 @@ class _BodyState extends State<Body> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => NotificationType(),
+                                builder: (context) => const NotificationType(),
                               ),
                             );
                           },
@@ -505,7 +507,7 @@ class _BodyState extends State<Body> {
                                               6, 2, 6, 2),
                                           child: Text(
                                             unreadHomework,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: Colors.red,
                                               fontSize: 12.5,
                                             ),
@@ -697,7 +699,7 @@ class _BodyState extends State<Body> {
                                         6, 2, 6, 2),
                                     child: Text(
                                       unreadHomework,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.red,
                                         fontSize: 12.5,
                                       ),
@@ -762,7 +764,7 @@ class _BodyState extends State<Body> {
                                         6, 2, 6, 2),
                                     child: Text(
                                       unreadHomework,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.red,
                                         fontSize: 12.5,
                                       ),
@@ -833,7 +835,7 @@ class _BodyState extends State<Body> {
                       children: [
                         InkWell(
                           onTap: () {
-                            Get.to(()=>ViewQueries());
+                            Get.to(()=>const ViewQueries());
                           },
                           child: Container(
                             height: 60,
@@ -1155,12 +1157,12 @@ class _BodyState extends State<Body> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => SelectClassSem(),
+                                  builder: (context) => const SelectClassSem(),
                                 ),
                               );
                             }
                           },
-                          child: Card(
+                          child: const Card(
                             child: ListTile(
                               title: Text("Upload Previous Year Questions"),
                               trailing: CircleAvatar(
@@ -1170,7 +1172,7 @@ class _BodyState extends State<Body> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 30,
                         ),
                         GestureDetector(
@@ -1178,7 +1180,7 @@ class _BodyState extends State<Body> {
                             Get.back();
                             Get.to(QuestionHistory());
                           },
-                          child: Card(
+                          child: const Card(
                             child: ListTile(
                               title: Text("Previous Year Questions History"),
                               trailing: CircleAvatar(
@@ -1256,7 +1258,7 @@ class _BodyState extends State<Body> {
                             Get.to(CurMnthHolidayList());
                             // Get.to(ApplyForLeave());
                           },
-                          child: Card(
+                          child: const Card(
                             child: ListTile(
                               title: Text("Holidays"),
                               trailing: CircleAvatar(
@@ -1266,7 +1268,7 @@ class _BodyState extends State<Body> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 30,
                         ),
                         GestureDetector(
@@ -1274,7 +1276,7 @@ class _BodyState extends State<Body> {
                             Get.back();
                             Get.to(AcademicCalender());
                           },
-                          child: Card(
+                          child: const Card(
                             child: ListTile(
                               title: Text("Academic Calender"),
                               trailing: CircleAvatar(
@@ -1350,7 +1352,7 @@ class _BodyState extends State<Body> {
                             Get.to(ExamSchedule());
                             // Get.to(ApplyForLeave());
                           },
-                          child: Card(
+                          child: const Card(
                             child: ListTile(
                               title: Text("Exam Schedule"),
                               trailing: CircleAvatar(
@@ -1360,15 +1362,15 @@ class _BodyState extends State<Body> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 30,
                         ),
                         GestureDetector(
                           onTap: () {
                             Get.back();
-                            Get.to(ExamResult());
+                            Get.to(const ExamResult());
                           },
-                          child: Card(
+                          child: const Card(
                             child: ListTile(
                               title: Text("Exam Result"),
                               trailing: CircleAvatar(
@@ -1428,69 +1430,103 @@ class _BodyState extends State<Body> {
                   ),
                 ),
                 const Divider(height: 5),
-                Container(
-                  height: 270,
-                  // color: Colors.red,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 15, bottom: 15, right: 20, left: 20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Get.back();
-                            Get.to(ApplyForLeave());
-                          },
-                          child: Card(
-                            child: ListTile(
-                              title: Text("Apply For Leave"),
-                              trailing: CircleAvatar(
-                                  radius: 15,
-                                  foregroundColor: kThemeColor,
-                                  child: Icon(Icons.arrow_right)),
-                            ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: 15, bottom: 15, right: 20, left: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Get.back();
+                          Get.to(ApplyForLeave());
+                        },
+                        child: const Card(
+                          child: ListTile(
+                            title: Text("Apply For Leave"),
+                            trailing: CircleAvatar(
+                                radius: 15,
+                                foregroundColor: kThemeColor,
+                                child: Icon(Icons.arrow_right)),
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Get.back();
-                            Get.to(LeaveSatus());
-                          },
-                          child: Card(
-                            child: ListTile(
-                              title: Text("Leave Status"),
-                              trailing: CircleAvatar(
-                                  radius: 15,
-                                  foregroundColor: kThemeColor,
-                                  child: Icon(Icons.arrow_right)),
-                            ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.back();
+                          Get.to(LeaveSatus());
+                        },
+                        child: const Card(
+                          child: ListTile(
+                            title: Text("Leave Status"),
+                            trailing: CircleAvatar(
+                                radius: 15,
+                                foregroundColor: kThemeColor,
+                                child: Icon(Icons.arrow_right)),
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Get.back();
-                            Get.to(LeaveSummery());
-                          },
-                          child: Card(
-                            child: ListTile(
-                              title: Text("Leave Summary"),
-                              trailing: CircleAvatar(
-                                  radius: 15,
-                                  foregroundColor: kThemeColor,
-                                  child: Icon(Icons.arrow_right)),
-                            ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.back();
+                          Get.to(LeaveSummery());
+                        },
+                        child: const Card(
+                          child: ListTile(
+                            title: Text("Leave Summary"),
+                            trailing: CircleAvatar(
+                                radius: 15,
+                                foregroundColor: kThemeColor,
+                                child: Icon(Icons.arrow_right)),
                           ),
-                        )
-                      ],
-                    ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.back();
+                          Get.to(()=>const LeaveApprovalStatus());
+                        },
+                        child: const Card(
+                          child: ListTile(
+                            title: Text("Leave Approval"),
+                            trailing: CircleAvatar(
+                                radius: 15,
+                                foregroundColor: kThemeColor,
+                                child: Icon(Icons.arrow_right)),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.back();
+                          Get.to(()=>const EmpColEntry());
+                        },
+                        child: const Card(
+                          child: ListTile(
+                            title: Text("COL Entry"),
+                            trailing: CircleAvatar(
+                                radius: 15,
+                                foregroundColor: kThemeColor,
+                                child: Icon(Icons.arrow_right)),
+                          ),
+                        ),
+                      )
+
+                    ],
                   ),
                 ),
                 const SizedBox(height: 15)
